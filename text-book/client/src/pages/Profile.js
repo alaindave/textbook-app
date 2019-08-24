@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import NavBarAdmin from '../components/NavBarAdmin';
+import NavBarProfile from '../components/NavBarProfile';
 import { Grid, Container } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { StyledButton } from '../themes/theme';
@@ -52,8 +52,8 @@ const Profile = (props) => {
 	const classes = useStyles();
 
 	return (
-		<Container className={classes.content} maxWidth="lg">
-			<NavBarAdmin />
+		<div className={classes.profileContainer}>
+			<NavBarProfile />
 			<Grid container direction="row" alignItems="center">
 				<Link
 					to={{
@@ -77,7 +77,7 @@ const Profile = (props) => {
 					</StyledButton>
 				</Link>
 			</Grid>
-		</Container>
+		</div>
 	);
 };
 

@@ -23,12 +23,12 @@ const useStyles = makeStyles((theme) => ({
 		boxShadow: 'none'
 	},
 	toolbar: {
-		padding: '15px',
 		right: '0',
 		left: '0',
 		marginRight: 'auto',
 		marginLeft: 'auto',
-		width: '100%'
+		width: '100%',
+		height: '30%'
 	},
 
 	appName: {
