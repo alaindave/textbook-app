@@ -50,7 +50,10 @@ const useStyles = makeStyles((theme) => ({
 		bottom: '160px'
 	},
 	error: {
-		color: 'red'
+		color: 'red',
+		position: 'relative',
+		bottom: '250px',
+		left: '150px'
 	},
 
 	firstNameField: {
@@ -144,9 +147,20 @@ const Landing = (props) => {
 			});
 	};
 
+	const handleLogin = (isAuthenticated, userID) => {
+		if (isAuthenticated)
+			return props.history.push({
+				pathname: `/profile/${userID}`
+			});
+	};
+
+	const handleError = (error) => {
+		setErrorMessage(error);
+	};
+
 	return (
 		<div className={classes.landingContainer}>
-			<NavBarHome />
+			<NavBarHome handleLogin={handleLogin} handleError={handleError} />
 			<form onSubmit={handleSubmit}>
 				<Grid container direction="row" alignItems="center" className="mainGrid">
 					<Grid item>
@@ -164,6 +178,9 @@ const Landing = (props) => {
 						</Typography>
 					</Grid>
 					<Grid container direction="column" alignItems="center">
+						<Grid item className={classes.error}>
+							{errorMessage}
+						</Grid>
 						<Grid item>
 							<Typography className={classes.askRegister}>
 								<span style={{ fontWeight: 'bold', fontSize: '35px' }}>Sign Up.</span>
@@ -259,9 +276,6 @@ const Landing = (props) => {
 							<StyledButton variant="contained" className={classes.button} type="submit">
 								Sign Up
 							</StyledButton>
-						</Grid>
-						<Grid item className={classes.error}>
-							{errorMessage}
 						</Grid>
 					</Grid>
 				</Grid>

@@ -5,6 +5,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 
+import axios from 'axios';
+
 const useStyles = makeStyles((theme) => ({
 	root: {},
 
@@ -23,12 +25,12 @@ const useStyles = makeStyles((theme) => ({
 		boxShadow: 'none'
 	},
 	toolbar: {
+		padding: '15px',
 		right: '0',
 		left: '0',
 		marginRight: 'auto',
 		marginLeft: 'auto',
-		width: '100%',
-		height: '30%'
+		width: '100%'
 	},
 
 	appName: {
@@ -86,11 +88,47 @@ const useStyles = makeStyles((theme) => ({
 	}
 }));
 
-const NavBarWelcome = (props) => {
-	const [ email, setEmail ] = useState(' ');
+const NavBarHome = (props) => {
+	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
+	const [ errorMessage, setErrorMessage ] = useState('');
 
 	const classes = useStyles();
+
+	const handleLogin = async (e) => {
+		e.preventDefault();
+		const userData = {
+			email,
+			password
+		};
+
+		await axios
+			.post('/api/auth', userData)
+			.then((response) => {
+				console.log('Data received:', response.data);
+
+				// get jwt token from header
+				const token = response.headers['x-auth-token'];
+
+				// add token and name to local storage
+				window.localStorage.setItem('token', token);
+				window.localStorage.setItem('userID', response.data.id);
+				window.localStorage.setItem('firstName', response.data.firstName);
+				window.localStorage.setItem('lastName', response.data.lastName);
+
+				// test if token is stored
+				const localStorageToken = window.localStorage.getItem('token');
+				console.log('token from local storage:', localStorageToken);
+
+				//direct user to admin page
+				props.handleLogin(true, response.data.id);
+			})
+			.catch((error) => {
+				setErrorMessage(error.response.data);
+				console.log(error);
+				props.handleError(error.response.data);
+			});
+	};
 
 	return (
 		<div className={classes.root}>
@@ -128,7 +166,9 @@ const NavBarWelcome = (props) => {
 								margin="normal"
 								variant="outlined"
 							/>
-							<button className={classes.loginButton}>Log in</button>
+							<button className={classes.loginButton} onClick={handleLogin}>
+								Log in
+							</button>
 						</Grid>
 					</Grid>
 				</Toolbar>
@@ -137,4 +177,4 @@ const NavBarWelcome = (props) => {
 	);
 };
 
-export default NavBarWelcome;
+export default NavBarHome;
