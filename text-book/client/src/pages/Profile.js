@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import NavBarProfile from '../components/NavBarProfile';
+import CreatePost from '../components/CreatePost';
+
 import Banner from '../components/Banner';
 
 import { Grid } from '@material-ui/core';
@@ -72,6 +74,7 @@ const Profile = (props) => {
 		<div className={classes.profileContainer}>
 			<NavBarProfile id={id} />
 			<Banner />
+			<CreatePost />
 		</div>
 	);
 };

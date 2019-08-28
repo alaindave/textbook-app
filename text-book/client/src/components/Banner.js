@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { StyledButton } from '../themes/theme';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -64,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
 
 	navButtons: {
 		borderStyle: 'solid',
-		borderColor: '#f7f7f7',
+		borderColor: '#dfe3ee',
 		position: 'relative',
 		bottom: '210px',
 		left: '20px'
@@ -72,7 +74,27 @@ const useStyles = makeStyles((theme) => ({
 
 	button: {
 		color: '#3b5998	',
-		backgroundColor: '#ffffff'
+		backgroundColor: '#ffffff',
+		borderStyle: 'solid',
+		borderColor: 'red'
+	},
+
+	buttonEditProfile: {
+		position: 'relative',
+		bottom: '230px',
+		fontSize: '14px',
+		padding: '10px',
+		width: '140px',
+		height: '40px',
+		left: '320px',
+		backgroundColor: '#dfe3ee',
+		color: 'black'
+	},
+
+	userEdit: {
+		position: 'relative',
+		right: '10px',
+		bottom: '2px'
 	}
 }));
 
@@ -172,6 +194,11 @@ const Banner = (props) => {
 					{'  '}
 					{lastName}
 				</span>
+
+				<StyledButton variant="contained" className={classes.buttonEditProfile} type="submit">
+					<FontAwesomeIcon icon={faUserEdit} className={classes.userEdit} />
+					Edit profile
+				</StyledButton>
 			</Grid>
 
 			<Grid item>
