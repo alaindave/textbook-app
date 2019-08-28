@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
 const NavBarHome = (props) => {
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
-	const [ errorMessage, setErrorMessage ] = useState('');
+	const [ setErrorMessage ] = useState('');
 
 	const classes = useStyles();
 
@@ -112,7 +112,7 @@ const NavBarHome = (props) => {
 
 				// add token and name to local storage
 				window.localStorage.setItem('token', token);
-				window.localStorage.setItem('userID', response.data.id);
+				window.localStorage.setItem('userID', response.data._id);
 				window.localStorage.setItem('firstName', response.data.firstName);
 				window.localStorage.setItem('lastName', response.data.lastName);
 
@@ -120,8 +120,9 @@ const NavBarHome = (props) => {
 				const localStorageToken = window.localStorage.getItem('token');
 				console.log('token from local storage:', localStorageToken);
 
-				//direct user to admin page
-				props.handleLogin(true, response.data.id);
+				//direct user to profile page
+				console.log('id from navbar ', response.data._id);
+				props.handleLogin(true, response.data._id);
 			})
 			.catch((error) => {
 				setErrorMessage(error.response.data);

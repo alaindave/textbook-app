@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { addUser } = require('../db');
+const { addUser, addPic, addCoverPic } = require('../db');
 const validate = require('../validate/validateNew');
 const User = require('../models/userModel');
 const hash = require('../hash');
 const authorize = require('../authorize');
+const upload = require('../services/fileUpload');
 
 const _ = require('lodash');
 
@@ -52,15 +53,43 @@ router.post('/', async (req, res, next) => {
 	}
 });
 
-router.get('/:id', authorize, async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
 	try {
-		const admin = await Admin.findById(req.params.id);
-		if (!admin) return res.status(404).send('Admin not found');
-		res.status(200).send(admin);
+		let user = await User.findById(req.params.id);
+		if (!user) return res.status(404).send('User not found');
+		console.log('this is the user found', user);
+		user = _.pick(user, [ '_id', 'firstName', 'lastName', 'email', 'profileUrl', 'coverUrl' ]);
+		res.status(200).send(user);
 	} catch (e) {
-		res.status(500).send('Unable to retrieve admin.Try again later');
-		console.log('Unable to retrieve admin');
+		res.status(500).send('Unable to retrieve user.Try again later');
+		console.log('Unable to retrieve user', e);
 	}
+});
+
+router.put('/:id/avatar', (req, res, next) => {
+	const image_upload = upload.single('image');
+	image_upload(req, res, (error) => {
+		if (error) {
+			res.status(422).json({ Error: error.message });
+		}
+		// Save new url
+		console.log('saved image blob', req.file);
+		addPic(req.file.location, req.params.id);
+		res.status(200).send({ imageUrl: req.file.location });
+	});
+});
+
+router.put('/:id/cover', (req, res, next) => {
+	const image_upload = upload.single('image');
+	image_upload(req, res, (error) => {
+		if (error) {
+			res.status(422).json({ Error: error.message });
+		}
+		// Save new url
+		console.log('saved image blob', req.file);
+		addCoverPic(req.file.location, req.params.id);
+		res.status(200).send({ imageUrl: req.file.location });
+	});
 });
 
 module.exports = router;

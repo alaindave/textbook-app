@@ -8,12 +8,12 @@ mongoose
 	.then(() => console.log('Connected to MongoDb...'))
 	.catch((err) => console.error('Could not connect to MongoDB', err));
 
-const addUser = async (user) => {
-	const admin = new User({
-		firstName: user.firstName,
-		lastName: user.lastName,
-		email: user.email,
-		password: user.password
+const addUser = async (_user) => {
+	const user = new User({
+		firstName: _user.firstName,
+		lastName: _user.lastName,
+		email: _user.email,
+		password: _user.password
 	});
 
 	try {
@@ -22,6 +22,34 @@ const addUser = async (user) => {
 	} catch (e) {
 		console.log('unable to register user');
 		return e.message;
+	}
+};
+
+const addPic = async (url, id) => {
+	try {
+		// Fetch user with the given id
+		const user = await User.findById(id);
+
+		//add url to staff document
+		user.profileUrl = url;
+		user.save();
+		console.log('updated user', user);
+	} catch (e) {
+		console.log('Unable to save image.Error message:', e.message);
+	}
+};
+
+const addCoverPic = async (url, id) => {
+	try {
+		// Fetch user with the given id
+		const user = await User.findById(id);
+
+		//add url to staff document
+		user.coverUrl = url;
+		user.save();
+		console.log('updated user', user);
+	} catch (e) {
+		console.log('Unable to save image.Error message:', e.message);
 	}
 };
 
@@ -42,21 +70,6 @@ const addStaff = async (_staff) => {
 	} catch (e) {
 		console.log('unable to add staff');
 		return e.message;
-	}
-};
-
-const addPic = async (url, id) => {
-	try {
-		// Fetch user with the given id
-		const staff = await Staff.findById(id);
-
-		//add url to staff document
-		staff.imageUrl = url;
-
-		staff.save();
-		console.log('updated staff', staff);
-	} catch (e) {
-		console.log('Unable to add image.Error message:', e.message);
 	}
 };
 
@@ -111,6 +124,7 @@ module.exports = {
 	addUser,
 	addStaff,
 	addPic,
+	addCoverPic,
 	getStaff,
 	getNumberOfStaff,
 	saveLetter,

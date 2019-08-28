@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import NavBarProfile from '../components/NavBarProfile';
-import { Grid, Container } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import { StyledButton } from '../themes/theme';
+import Banner from '../components/Banner';
+
+import { Grid } from '@material-ui/core';
+
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
 	content: {
@@ -45,38 +47,31 @@ const useStyles = makeStyles((theme) => ({
 		borderRadius: '10px',
 		position: 'relative',
 		left: '280px'
+	},
+
+	profilePicture: {
+		width: '100%',
+		height: '100%',
+		maxWidth: '120px',
+		maxHeight: '120px',
+		minWidth: '120px',
+		minHeight: '120px',
+		objectFit: 'cover',
+		borderRadius: '50%',
+		float: 'left',
+		position: 'relative',
+		right: '400px'
 	}
 }));
 
 const Profile = (props) => {
 	const classes = useStyles();
+	const id = props.match.params.id;
 
 	return (
 		<div className={classes.profileContainer}>
-			<NavBarProfile />
-			<Grid container direction="row" alignItems="center">
-				<Link
-					to={{
-						pathname: '/staffList'
-					}}
-					style={{ textDecoration: 'none' }}
-				>
-					<StyledButton variant="contained" className={classes.button1}>
-						profile page 1{' '}
-					</StyledButton>
-				</Link>
-
-				<Link
-					to={{
-						pathname: '/addEmployee'
-					}}
-					style={{ textDecoration: 'none' }}
-				>
-					<StyledButton variant="contained" color="secondary" className={classes.button2}>
-						profile page 2
-					</StyledButton>
-				</Link>
-			</Grid>
+			<NavBarProfile id={id} />
+			<Banner />
 		</div>
 	);
 };

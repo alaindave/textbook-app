@@ -7,7 +7,6 @@ const staffSchema = new mongoose.Schema({
 	lastName: { type: String, required: true },
 	telephone: { type: Number, required: true },
 	address: { type: String, required: true },
-	imageUrl: { type: String },
 	daysOff: { type: Number },
 	approvedBreaks: [
 		{

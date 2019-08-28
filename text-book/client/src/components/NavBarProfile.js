@@ -7,8 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
 import logo from '../assets/logo.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { Avatar } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
@@ -166,15 +164,19 @@ function NavBarProfile(props) {
 							<span className={classes.firstName}> {firstName}</span>
 						</Grid>
 						<Grid item>
-							<Link>
+							<Link
+								to={{
+									pathname: `/profile/${props.id}`
+								}}
+							>
 								<button className={classes.buttonHome}>Home</button>
 							</Link>
 						</Grid>
 
 						<Grid item>
-							<Link>
-								<button className={classes.findFriends}>Find Friends</button>
-							</Link>
+							{/* <Link> */}
+							<button className={classes.findFriends}>Find Friends</button>
+							{/* </Link> */}
 						</Grid>
 					</Grid>
 				</Toolbar>
