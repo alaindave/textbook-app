@@ -134,7 +134,10 @@ const Landing = (props) => {
 
 				// test if token is stored
 				const localStorageToken = window.localStorage.getItem('token');
+				const id = window.localStorage.getItem('userID');
+
 				console.log('token from local storage:', localStorageToken);
+				console.log('id1 from storage', id);
 
 				//direct user to admin page
 				props.history.push({

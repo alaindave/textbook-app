@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import NavBarProfile from '../components/NavBarProfile';
 import CreatePost from '../components/CreatePost';
+import PostComponent from '../components/PostComponent';
 
 import Banner from '../components/Banner';
 
@@ -69,12 +70,53 @@ const useStyles = makeStyles((theme) => ({
 const Profile = (props) => {
 	const classes = useStyles();
 	const id = props.match.params.id;
+	const [ firstName, setFirstName ] = useState('');
+	const [ lastName, setLastName ] = useState('');
+	const [ email, setEmail ] = useState('');
+	const [ profileUrl, setProfileUrl ] = useState('');
+	const [ coverUrl, setCoverUrl ] = useState('');
+	const [ userPosts, setUserPosts ] = useState([ ' ' ]);
+
+	useEffect(() => {
+		axios
+			.get(`/api/users/${id}`)
+			.then((response) => {
+				console.log('Data received:', response.data);
+				setFirstName(response.data.firstName);
+				setLastName(response.data.lastName);
+				setEmail(response.data.email);
+				setProfileUrl(response.data.profileUrl);
+				setCoverUrl(response.data.coverUrl);
+				setUserPosts(response.data.posts);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	});
+
+	const generateUserPosts = () => {
+		// if user has not created a post ask him to
+		if (userPosts.length === 0) {
+			return <span>Please add a post</span>;
+		}
+
+		// else generate the created conversations
+		const posts = userPosts.map((post) => (
+			<Grid item key={post._id} className={classes.item}>
+				<PostComponent post={post.post} date={post.date} />
+			</Grid>
+		));
+		return posts;
+	};
 
 	return (
 		<div className={classes.profileContainer}>
 			<NavBarProfile id={id} />
 			<Banner />
 			<CreatePost />
+			<Grid container className={classes.grid}>
+				{generateUserPosts()}
+			</Grid>
 		</div>
 	);
 };

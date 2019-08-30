@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
 const NavBarHome = (props) => {
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
-	const [ setErrorMessage ] = useState('');
+	const [ errorMessage, setErrorMessage ] = useState('');
 
 	const classes = useStyles();
 
@@ -125,7 +125,7 @@ const NavBarHome = (props) => {
 				props.handleLogin(true, response.data._id);
 			})
 			.catch((error) => {
-				setErrorMessage(error.response.data);
+				setErrorMessage(error);
 				console.log(error);
 				props.handleError(error.response.data);
 			});

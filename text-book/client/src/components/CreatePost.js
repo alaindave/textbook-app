@@ -38,36 +38,55 @@ const useStyles = makeStyles((theme) => ({
 
 	container: {
 		position: 'relative',
-		left: '575px',
+		left: '607px',
 		bottom: '200px',
 		borderStyle: 'solid',
 		borderColor: '#dfe3ee',
-		width: '435px',
+		width: '400px',
 		backgroundColor: '#ffffff'
 	}
 }));
 
 const CreatePost = (props) => {
+	const [ status, setStatus ] = useState('');
 	const classes = useStyles();
+	const id = window.localStorage.getItem('userID');
+
+	const handlePost = () => {
+		axios
+			.post(`/api/users/${id}/posts`, { post: status })
+			.then((response) => {
+				console.log('Post successfully saved:', response.data);
+				setStatus(' ');
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
 
 	return (
 		<div className={classes.container}>
 			<Grid container direction="column">
 				<Grid item>
-					<StyledButton variant="contained" className={classes.button} type="submit">
+					<StyledButton variant="contained" className={classes.button} type="submit" onClick={handlePost}>
 						Create Post
 					</StyledButton>
-
 					<StyledButton variant="contained" className={classes.button} type="submit">
 						Photo
 					</StyledButton>
-
 					<StyledButton variant="contained" className={classes.button} type="submit">
-						Tag Friends
+						Video
 					</StyledButton>
 				</Grid>
 				<Grid item>
-					<TextField placeholder="What's on your mind?" multiline={true} rows={4} rowsMax={10} />
+					<TextField
+						placeholder="What's on your mind?"
+						multiline={true}
+						rows={4}
+						rowsMax={10}
+						value={status}
+						onChange={(e) => setStatus(e.target.value)}
+					/>
 				</Grid>
 			</Grid>
 		</div>

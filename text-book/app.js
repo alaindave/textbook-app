@@ -8,7 +8,6 @@ dotenv.config();
 
 const userRouter = require('./routes/userRoute');
 const loginRouter = require('./routes/loginRoute');
-const staffRouter = require('./routes/staffRoute');
 
 if (
 	!process.env.jwtKey ||
@@ -32,7 +31,6 @@ app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 app.use('/api/users', userRouter);
 app.use('/api/auth', loginRouter);
-app.use('/api/staff', staffRouter);
 
 require('./prod')(app);
 

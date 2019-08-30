@@ -7,13 +7,21 @@ const userSchema = new mongoose.Schema({
 	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
 	profileUrl: { type: String },
-	coverUrl: { type: String }
+	coverUrl: { type: String },
+	posts: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Posts'
+		}
+	],
+	photos: [ { type: String, required: true } ],
+	videos: [ { type: String, required: true } ]
 });
 
 userSchema.methods.generateToken = function() {
 	return jwt.sign({ lastName: this.lastName, email: this.email }, process.env.jwtKey);
 };
 
-const Users = mongoose.model('User', userSchema);
+const Users = mongoose.model('Users', userSchema);
 
 module.exports = Users;

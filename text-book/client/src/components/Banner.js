@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
 	cameraIconCover: {
 		position: 'relative',
 		left: '5px',
-		bottom: '300px',
-		color: 'grey'
+		// bottom: '300px',
+		color: 'red'
 	},
 
 	coverPicture: {
@@ -99,17 +99,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Banner = (props) => {
+	const classes = useStyles();
+	const id = window.localStorage.getItem('userID');
 	const [ firstName, setFirstName ] = useState('');
 	const [ lastName, setLastName ] = useState('');
 	const [ email, setEmail ] = useState('');
 	const [ profileUrl, setProfileUrl ] = useState('');
 	const [ coverUrl, setCoverUrl ] = useState('');
-
-	const classes = useStyles();
-	const id = window.localStorage.getItem('userID');
+	const [ posts, setPosts ] = useState([]);
 
 	useEffect(() => {
-		console.log('id from storage', id);
+		console.log('id2 from storage', id);
 
 		axios
 			.get(`/api/users/${id}`)

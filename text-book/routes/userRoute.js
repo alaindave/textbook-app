@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addUser, addPic, addCoverPic } = require('../db');
+const { addUser, addPic, addCoverPic, savePost, addPost } = require('../db');
 const validate = require('../validate/validateNew');
 const User = require('../models/userModel');
 const hash = require('../hash');
@@ -53,12 +53,23 @@ router.post('/', async (req, res, next) => {
 	}
 });
 
+//get user
 router.get('/:id', async (req, res, next) => {
 	try {
-		let user = await User.findById(req.params.id);
+		let user = await User.findById(req.params.id).populate('posts');
 		if (!user) return res.status(404).send('User not found');
 		console.log('this is the user found', user);
-		user = _.pick(user, [ '_id', 'firstName', 'lastName', 'email', 'profileUrl', 'coverUrl' ]);
+		user = _.pick(user, [
+			'_id',
+			'firstName',
+			'lastName',
+			'email',
+			'profileUrl',
+			'coverUrl',
+			'posts',
+			'photos',
+			'videos'
+		]);
 		res.status(200).send(user);
 	} catch (e) {
 		res.status(500).send('Unable to retrieve user.Try again later');
@@ -66,6 +77,7 @@ router.get('/:id', async (req, res, next) => {
 	}
 });
 
+//save avatar
 router.put('/:id/avatar', (req, res, next) => {
 	const image_upload = upload.single('image');
 	image_upload(req, res, (error) => {
@@ -79,6 +91,7 @@ router.put('/:id/avatar', (req, res, next) => {
 	});
 });
 
+//save cover picture
 router.put('/:id/cover', (req, res, next) => {
 	const image_upload = upload.single('image');
 	image_upload(req, res, (error) => {
@@ -90,6 +103,19 @@ router.put('/:id/cover', (req, res, next) => {
 		addCoverPic(req.file.location, req.params.id);
 		res.status(200).send({ imageUrl: req.file.location });
 	});
+});
+
+//save posts
+router.post('/:id/posts', async (req, res, next) => {
+	//save post in posts collection
+	try {
+		const post = await savePost(req.body.post);
+		console.log('saved post:', post);
+		addPost(req.params.id, post._id);
+		res.status(200).send(post);
+	} catch (e) {
+		console.log('an error occured', e);
+	}
 });
 
 module.exports = router;
