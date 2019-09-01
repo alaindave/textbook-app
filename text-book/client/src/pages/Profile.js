@@ -17,12 +17,10 @@ const useStyles = makeStyles((theme) => ({
 
 	grid: {
 		display: 'flex',
-		flexWrap: 'wrap',
-		width: '70%'
+		flexWrap: 'wrap'
 	},
 	item: {
 		marginTop: theme.spacing(5),
-		marginLeft: theme.spacing(1),
 		marginRight: theme.spacing(1)
 	},
 
@@ -64,6 +62,18 @@ const useStyles = makeStyles((theme) => ({
 		float: 'left',
 		position: 'relative',
 		right: '400px'
+	},
+
+	post: {
+		position: 'relative',
+		left: '580px',
+		bottom: '200px',
+		borderStyle: 'solid',
+		borderColor: '#dfe3ee',
+		width: '400px',
+		height: '180px',
+		backgroundColor: '#ffffff',
+		marginBottom: '15px'
 	}
 }));
 
@@ -102,8 +112,14 @@ const Profile = (props) => {
 
 		// else generate the created conversations
 		const posts = userPosts.map((post) => (
-			<Grid item key={post._id} className={classes.item}>
-				<PostComponent post={post.post} date={post.date} />
+			<Grid item key={post._id} className={classes.post}>
+				<PostComponent
+					firstName={firstName}
+					lastName={lastName}
+					avatar={profileUrl}
+					post={post.post}
+					date={post.date}
+				/>
 			</Grid>
 		));
 		return posts;
@@ -114,7 +130,7 @@ const Profile = (props) => {
 			<NavBarProfile id={id} />
 			<Banner />
 			<CreatePost />
-			<Grid container className={classes.grid}>
+			<Grid container className={classes.grid} direction="column">
 				{generateUserPosts()}
 			</Grid>
 		</div>

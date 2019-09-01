@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
 	coverFrame: {
 		width: '890px',
 		height: '310px',
-		// borderColor: 'red',
 		borderStyle: 'transparent'
 	},
 

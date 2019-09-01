@@ -1,41 +1,96 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { StyledButton } from '../themes/theme';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faComments } from '@fortawesome/free-solid-svg-icons';
+
 import TextField from '@material-ui/core/TextField';
 
-import { Grid } from '@material-ui/core';
-
-import axios from 'axios';
-
 const useStyles = makeStyles((theme) => ({
-	grid: {
-		display: 'flex',
-		flexWrap: 'wrap',
-		width: '70%'
-	},
-
-	profilePicture: {
-		width: '100%',
-		height: '100%',
-		maxWidth: '120px',
-		maxHeight: '120px',
-		minWidth: '120px',
-		minHeight: '120px',
+	avatar: {
+		width: '40px',
+		height: '48px',
+		// maxWidth: '170px',
+		// maxHeight: '170px',
 		objectFit: 'cover',
 		borderRadius: '50%',
-		float: 'left',
+		// position: 'relative',
+		// bottom: '150px',
+		// left: '10px',
+		borderStyle: 'solid',
+		borderColor: 'white'
+	},
+
+	name: {
 		position: 'relative',
-		right: '400px'
+		bottom: '23px',
+		fontSize: '16px',
+		color: '#3b5998	'
+	},
+
+	date: {
+		color: '#8c8c8c',
+		position: 'relative',
+		right: '90px'
+	},
+	post: {
+		fontSize: '20px',
+		marginLeft: '10px'
+	},
+
+	buttonLike: {
+		position: 'relative',
+		left: '10px',
+		bottom: '8px',
+		fontSize: '12px'
+	},
+	buttonComment: {
+		position: 'relative',
+		left: '40px',
+		bottom: '8px',
+		fontSize: '12px'
 	}
 }));
 
 const PostComponent = (props) => {
 	const classes = useStyles();
+	const { avatar, date, firstName, lastName, post } = props;
+	const [ comment, setComment ] = useState('');
 
 	return (
 		<div className={classes.container}>
-			<span>Date: {props.date}</span>
-			<span>Post: {props.post}</span>
+			<img src={avatar} className={classes.avatar} alt="Cover pic" />
+			<span className={classes.name}>
+				{' '}
+				{firstName} {lastName}{' '}
+			</span>
+			<span className={classes.date}>{date}</span>
+			<br />
+			<br />
+			<span className={classes.post}>{post}</span>
+			<br />
+			<br />
+
+			<button className={classes.buttonLike}>
+				{' '}
+				Like <FontAwesomeIcon icon={faThumbsUp} className={classes.iconLike} />
+			</button>
+
+			<button className={classes.buttonComment}>
+				{' '}
+				Comment <FontAwesomeIcon icon={faComments} className={classes.iconComment} />
+			</button>
+
+			{/* <div>
+				<TextField
+					placeholder="Write a comment ..."
+					multiline={true}
+					rows={1}
+					rowsMax={10}
+					value={comment}
+					onChange={(e) => setComment(e.target.value)}
+				/>
+			</div> */}
 		</div>
 	);
 };

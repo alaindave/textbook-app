@@ -38,12 +38,13 @@ const useStyles = makeStyles((theme) => ({
 
 	container: {
 		position: 'relative',
-		left: '607px',
+		left: '575px',
 		bottom: '200px',
 		borderStyle: 'solid',
 		borderColor: '#dfe3ee',
 		width: '400px',
-		backgroundColor: '#ffffff'
+		backgroundColor: '#ffffff',
+		marginBottom: '20px'
 	}
 }));
 
