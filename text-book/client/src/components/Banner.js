@@ -5,6 +5,7 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { StyledButton } from '../themes/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -45,6 +46,14 @@ const useStyles = makeStyles((theme) => ({
 		borderStyle: 'solid',
 		borderColor: 'white'
 	},
+
+	iconAddProfile:{
+	fontSize:'140px',	
+	position: 'relative',
+	bottom: '190px',
+	// left: '10px',
+
+},
 
 	cameraIconProfile: {
 		position: 'relative',
@@ -94,7 +103,9 @@ const useStyles = makeStyles((theme) => ({
 		position: 'relative',
 		right: '10px',
 		bottom: '2px'
-	}
+	},
+
+	
 }));
 
 const Banner = (props) => {
@@ -173,8 +184,9 @@ const Banner = (props) => {
 						</IconButton>
 					</label>
 				</div>
-
-				<img src={profileUrl} className={classes.profilePicture} alt="Profile pic" />
+{profileUrl?				<img src={profileUrl} className={classes.profilePicture} alt="Profile pic" />
+:							<FontAwesomeIcon icon={faUserCircle} className={classes.iconAddProfile} />
+}
 				<input
 					accept="image/*"
 					style={{ display: 'none' }}

@@ -79,13 +79,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = (props) => {
 	const classes = useStyles();
-	const id = props.match.params.id;
+	const id = window.localStorage.getItem('userID');
 	const [ firstName, setFirstName ] = useState('');
 	const [ lastName, setLastName ] = useState('');
 	const [ email, setEmail ] = useState('');
 	const [ profileUrl, setProfileUrl ] = useState('');
 	const [ coverUrl, setCoverUrl ] = useState('');
-	const [ userPosts, setUserPosts ] = useState([ ' ' ]);
+	const [ userPosts, setUserPosts ] = useState([]);
 
 	useEffect(() => {
 		axios
@@ -127,7 +127,7 @@ const Profile = (props) => {
 
 	return (
 		<div className={classes.profileContainer}>
-			<NavBarProfile id={id} />
+			<NavBarProfile id={id} profileUrl={profileUrl}/>
 			<Banner />
 			<CreatePost />
 			<Grid container className={classes.grid} direction="column">

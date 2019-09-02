@@ -124,6 +124,20 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: 'white',
 		position: 'relative',
 		left: '90px'
+	},
+
+	profilePic:{
+		width: '40px',
+		height: '40px',
+		maxWidth: '100px',
+		maxHeight: '100px',
+		objectFit: 'cover',
+		borderRadius: '50%',
+		position: 'relative',
+		// bottom: '150px',
+		left: '540px',
+		borderStyle: 'solid',
+		// borderColor: 'white'
 	}
 }));
 
@@ -133,6 +147,8 @@ function NavBarProfile(props) {
 	const firstName = window.localStorage.getItem('firstName');
 
 	const [ keyword, setKeyWord ] = useState('');
+
+	const {profileUrl}=props
 
 	return (
 		<div className={classes.root}>
@@ -158,7 +174,8 @@ function NavBarProfile(props) {
 							/>
 						</Grid>
 						<Grid item>
-							<Avatar className={classes.avatar} />
+							{profileUrl&&
+							<img src={profileUrl} className={classes.profilePic}/>}					
 						</Grid>
 						<Grid item>
 							<span className={classes.firstName}> {firstName}</span>

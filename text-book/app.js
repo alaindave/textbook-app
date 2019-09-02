@@ -12,9 +12,7 @@ const loginRouter = require('./routes/loginRoute');
 if (
 	!process.env.jwtKey ||
 	!process.env.secretAccessKey ||
-	!process.env.accessKeyId ||
-	!process.env.email ||
-	!process.env.email_password
+	!process.env.accessKeyId 
 ) {
 	console.error('FATAL ERROR:ENV VARIABLES NOT SET!');
 	process.exit(1);

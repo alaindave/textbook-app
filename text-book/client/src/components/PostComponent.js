@@ -10,13 +10,8 @@ const useStyles = makeStyles((theme) => ({
 	avatar: {
 		width: '40px',
 		height: '48px',
-		// maxWidth: '170px',
-		// maxHeight: '170px',
 		objectFit: 'cover',
 		borderRadius: '50%',
-		// position: 'relative',
-		// bottom: '150px',
-		// left: '10px',
 		borderStyle: 'solid',
 		borderColor: 'white'
 	},
@@ -42,13 +37,22 @@ const useStyles = makeStyles((theme) => ({
 		position: 'relative',
 		left: '10px',
 		bottom: '8px',
-		fontSize: '12px'
+		fontSize: '16px',
+		backgroundColor:'transparent',
+		borderStyle:'none'
 	},
 	buttonComment: {
 		position: 'relative',
 		left: '40px',
 		bottom: '8px',
-		fontSize: '12px'
+		fontSize: '12px',
+		fontSize: '16px',
+		backgroundColor:'transparent',
+		borderStyle:'none'
+	},
+
+	iconLike:{
+		fontSize:'12px'
 	}
 }));
 
@@ -73,15 +77,10 @@ const PostComponent = (props) => {
 
 			<button className={classes.buttonLike}>
 				{' '}
-				Like <FontAwesomeIcon icon={faThumbsUp} className={classes.iconLike} />
+				 <FontAwesomeIcon icon={faThumbsUp} className={classes.iconLike} />
 			</button>
 
-			<button className={classes.buttonComment}>
-				{' '}
-				Comment <FontAwesomeIcon icon={faComments} className={classes.iconComment} />
-			</button>
-
-			{/* <div>
+			<div>
 				<TextField
 					placeholder="Write a comment ..."
 					multiline={true}
@@ -90,7 +89,7 @@ const PostComponent = (props) => {
 					value={comment}
 					onChange={(e) => setComment(e.target.value)}
 				/>
-			</div> */}
+			</div>
 		</div>
 	);
 };
