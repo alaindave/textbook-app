@@ -54,9 +54,11 @@ const addCoverPic = async (url, id) => {
 
 const savePost = async (post) => {
 	const date = new Date();
+	const userLikeMap = new Map();
 	const _post = new Post({
 		date,
-		post
+		post,
+		userLikeMap
 	});
 
 	try {
@@ -105,6 +107,30 @@ const addVideo = async (url, id) => {
 		console.log('Unable to save video.Error message:', e.message);
 	}
 };
+
+const likeUnlikePost = async (userID, postID) => {
+	try {
+		// Fetch post
+		const post = await Post.findById(postID);
+
+		console.log('this is the userID ', userID);
+		console.log('this is the postID ', postID);
+		console.log('this is the post found ', post);
+
+		// if user has alredy liked post then unlike it
+		if (post.userLikeMap.get(userID)) {
+			post.userLikeMap.delete(userID);
+		} else {
+			// like convo
+			post.userLikeMap.set(userID, true);
+		}
+		const result = await post.save();
+		return result;
+	} catch (e) {
+		console.log('Unable to like/unlike the post.Error message:', e);
+		return e.message;
+	}
+};
 module.exports = {
 	addUser,
 	addPic,
@@ -112,5 +138,6 @@ module.exports = {
 	addPhoto,
 	addVideo,
 	savePost,
-	addPost
+	addPost,
+	likeUnlikePost
 };

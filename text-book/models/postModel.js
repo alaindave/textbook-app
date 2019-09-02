@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const comments = require('./commentModel');
 
 const postSchema = new mongoose.Schema({
 	date: { type: Date, required: true },
@@ -7,7 +8,7 @@ const postSchema = new mongoose.Schema({
 	comments: [
 		{
 			type: mongoose.Schema.Types.ObjectId,
-			ref: 'Comments'
+			ref: comments
 		}
 	]
 });

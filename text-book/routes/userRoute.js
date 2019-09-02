@@ -1,14 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const { addUser, addPic, addCoverPic, savePost, addPost } = require('../db');
+const { addUser, addPic, addCoverPic, savePost, addPost, likeUnlikePost } = require('../db');
 const validate = require('../validate/validateNew');
 const User = require('../models/userModel');
+const Post = require('../models/postModel');
 const hash = require('../hash');
 const authorize = require('../authorize');
 const upload = require('../services/fileUpload');
 
 const _ = require('lodash');
 
+//register new user
 router.post('/', async (req, res, next) => {
 	//validate input
 	const error = validate(req.body);
@@ -50,6 +52,18 @@ router.post('/', async (req, res, next) => {
 		}
 	} catch (e) {
 		console.log(e);
+	}
+});
+
+//get single post
+router.get('/posts/:postID', async (req, res, next) => {
+	try {
+		const post = await Post.findById(req.params.postID).populate('comments');
+		if (!post) return res.status(404).send('Post not found');
+		res.status(200).send(post);
+	} catch (e) {
+		res.status(500).send('Unable to retrieve post.Try again later');
+		console.log('Unable to retrieve post. Error message:', e);
 	}
 });
 
@@ -116,6 +130,13 @@ router.post('/:id/posts', async (req, res, next) => {
 	} catch (e) {
 		console.log('an error occured', e);
 	}
+});
+
+// like or unlike a post
+router.put('/:id/posts/like', (req, res, next) => {
+	likeUnlikePost(req.params.id, req.body.postID)
+		.then((result) => res.status(200).send(result))
+		.catch((e) => res.status(500).send('Unable to like/unlike!'));
 });
 
 module.exports = router;

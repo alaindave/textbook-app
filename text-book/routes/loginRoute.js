@@ -5,6 +5,7 @@ const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 const _ = require('lodash');
 
+//user login
 router.post('/', async (req, res, next) => {
 	//validate input
 	const error = validate(req.body);

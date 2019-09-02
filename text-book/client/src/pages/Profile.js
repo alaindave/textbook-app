@@ -102,7 +102,32 @@ const Profile = (props) => {
 			.catch((error) => {
 				console.log(error);
 			});
-	});
+	}, []);
+
+	const updatePosts = async (postID) => {
+		console.log('id of post to update: ', postID);
+
+		// get the conversation
+		await axios
+			.get(`/api/users/posts/${postID}`)
+			.then((response) => {
+				console.log('updated post', response.data);
+				const updatedPost = response.data;
+				const posts = [ ...userPosts ];
+
+				// find index of original post in array
+				const index = posts.findIndex((post) => {
+					return post._id === postID;
+				});
+
+				// update post array
+				posts[index] = updatedPost;
+				setUserPosts(posts);
+			})
+			.catch((error) => {
+				console.log('an error occured while updating post ...', error);
+			});
+	};
 
 	const generateUserPosts = () => {
 		// if user has not created a post ask him to
@@ -117,8 +142,8 @@ const Profile = (props) => {
 					firstName={firstName}
 					lastName={lastName}
 					avatar={profileUrl}
-					post={post.post}
-					date={post.date}
+					post={post}
+					handlePostUpdate={updatePosts}
 				/>
 			</Grid>
 		));
@@ -127,7 +152,7 @@ const Profile = (props) => {
 
 	return (
 		<div className={classes.profileContainer}>
-			<NavBarProfile id={id} profileUrl={profileUrl}/>
+			<NavBarProfile id={id} profileUrl={profileUrl} />
 			<Banner />
 			<CreatePost />
 			<Grid container className={classes.grid} direction="column">

@@ -59,6 +59,7 @@ const CreatePost = (props) => {
 			.then((response) => {
 				console.log('Post successfully saved:', response.data);
 				setStatus(' ');
+				window.location.reload();
 			})
 			.catch((error) => {
 				console.log(error);
