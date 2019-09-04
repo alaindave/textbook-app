@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addUser, addPic, addCoverPic, savePost, addPost, likeUnlikePost } = require('../db');
+const { addUser, addPic, addCoverPic, savePost, addPost, likeUnlikePost, saveComment, addComment } = require('../db');
 const validate = require('../validate/validateNew');
 const User = require('../models/userModel');
 const Post = require('../models/postModel');
@@ -55,22 +55,10 @@ router.post('/', async (req, res, next) => {
 	}
 });
 
-//get single post
-router.get('/posts/:postID', async (req, res, next) => {
-	try {
-		const post = await Post.findById(req.params.postID).populate('comments');
-		if (!post) return res.status(404).send('Post not found');
-		res.status(200).send(post);
-	} catch (e) {
-		res.status(500).send('Unable to retrieve post.Try again later');
-		console.log('Unable to retrieve post. Error message:', e);
-	}
-});
-
 //get user
-router.get('/:id', async (req, res, next) => {
+router.get('/:userID', async (req, res, next) => {
 	try {
-		let user = await User.findById(req.params.id).populate('posts');
+		let user = await User.findById(req.params.userID).populate('posts');
 		if (!user) return res.status(404).send('User not found');
 		console.log('this is the user found', user);
 		user = _.pick(user, [
@@ -92,7 +80,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 //save avatar
-router.put('/:id/avatar', (req, res, next) => {
+router.put('/:userID/avatar', (req, res, next) => {
 	const image_upload = upload.single('image');
 	image_upload(req, res, (error) => {
 		if (error) {
@@ -100,13 +88,13 @@ router.put('/:id/avatar', (req, res, next) => {
 		}
 		// Save new url
 		console.log('saved image blob', req.file);
-		addPic(req.file.location, req.params.id);
+		addPic(req.file.location, req.params.userID);
 		res.status(200).send({ imageUrl: req.file.location });
 	});
 });
 
 //save cover picture
-router.put('/:id/cover', (req, res, next) => {
+router.put('/:userID/cover', (req, res, next) => {
 	const image_upload = upload.single('image');
 	image_upload(req, res, (error) => {
 		if (error) {
@@ -114,29 +102,55 @@ router.put('/:id/cover', (req, res, next) => {
 		}
 		// Save new url
 		console.log('saved image blob', req.file);
-		addCoverPic(req.file.location, req.params.id);
+		addCoverPic(req.file.location, req.params.userID);
 		res.status(200).send({ imageUrl: req.file.location });
 	});
 });
 
 //save posts
-router.post('/:id/posts', async (req, res, next) => {
+router.post('/:userID/posts', async (req, res, next) => {
 	//save post in posts collection
 	try {
 		const post = await savePost(req.body.post);
 		console.log('saved post:', post);
-		addPost(req.params.id, post._id);
+		addPost(req.params.userID, post._id);
 		res.status(200).send(post);
 	} catch (e) {
 		console.log('an error occured', e);
 	}
 });
 
+//get single post
+router.get('/posts/:postID', async (req, res, next) => {
+	try {
+		const post = await Post.findById(req.params.postID).populate('comments');
+		if (!post) return res.status(404).send('Post not found');
+		res.status(200).send(post);
+	} catch (e) {
+		res.status(500).send('Unable to retrieve post.Try again later');
+		console.log('Unable to retrieve post. Error message:', e);
+	}
+});
+
 // like or unlike a post
-router.put('/:id/posts/like', (req, res, next) => {
-	likeUnlikePost(req.params.id, req.body.postID)
+router.put('/posts/:postID/like', (req, res, next) => {
+	likeUnlikePost(req.body.userID, req.params.postID)
 		.then((result) => res.status(200).send(result))
 		.catch((e) => res.status(500).send('Unable to like/unlike!'));
+});
+
+//comment on post
+router.post('/posts/:postID/comments', async (req, res, next) => {
+	try {
+		const comment = await saveComment(req.body.userID, req.body.comment, req.body.date);
+		console.log('comment saved', comment);
+		const addedComment = await addComment(req.params.postID, comment._id);
+		console.log('comment added', addedComment);
+		res.status(200).send(addedComment);
+	} catch (e) {
+		console.log('an error occured', e);
+		res.status(500).send('an error occured. Try again later...');
+	}
 });
 
 module.exports = router;

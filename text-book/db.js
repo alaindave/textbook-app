@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('./models/userModel');
 const Post = require('./models/postModel.js');
+const Comment = require('./models/commentModel.js');
 
 mongoose
 	.connect(process.env.MONGODB_URI || 'mongodb://localhost/textbookdb', { useNewUrlParser: true })
@@ -131,6 +132,35 @@ const likeUnlikePost = async (userID, postID) => {
 		return e.message;
 	}
 };
+
+const saveComment = async (author, comment, date) => {
+	const _comment = new Comment({
+		author,
+		comment,
+		date
+	});
+
+	try {
+		const result = await _comment.save();
+		return result;
+	} catch (e) {
+		console.log('unable to save comment', e);
+		return e.message;
+	}
+};
+
+const addComment = async (postID, commentID) => {
+	try {
+		// Fetch post
+		const post = await Post.findById(postID);
+		post.comments.push(commentID);
+		return post;
+	} catch (e) {
+		console.log('unable to add comment', e);
+		return e.message;
+	}
+};
+
 module.exports = {
 	addUser,
 	addPic,
@@ -139,5 +169,7 @@ module.exports = {
 	addVideo,
 	savePost,
 	addPost,
-	likeUnlikePost
+	likeUnlikePost,
+	saveComment,
+	addComment
 };

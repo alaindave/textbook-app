@@ -22,11 +22,10 @@ const useStyles = makeStyles((theme) => ({
 
 	cameraIconCover: {
 		position: 'relative',
-		left: '5px',
-		// bottom: '300px',
-		color: 'red'
+		// left: '5px',
+		bottom: '300px',
+		color: '#ff6666'
 	},
-
 	coverPicture: {
 		width: '900px',
 		height: '290px',
@@ -47,20 +46,19 @@ const useStyles = makeStyles((theme) => ({
 		borderColor: 'white'
 	},
 
-	iconAddProfile:{
-	fontSize:'140px',	
-	position: 'relative',
-	bottom: '190px',
-	// left: '10px',
-
-},
+	iconAddProfile: {
+		fontSize: '140px',
+		position: 'relative',
+		bottom: '190px'
+		// left: '10px',
+	},
 
 	cameraIconProfile: {
 		position: 'relative',
 		right: '35px',
 		bottom: '180px',
 		fontSize: '8px',
-		color: 'grey'
+		color: '#ff6666'
 	},
 
 	name: {
@@ -94,18 +92,15 @@ const useStyles = makeStyles((theme) => ({
 		padding: '10px',
 		width: '140px',
 		height: '40px',
-		left: '320px',
+		left: '360px',
 		backgroundColor: '#dfe3ee',
 		color: 'black'
 	},
 
 	userEdit: {
 		position: 'relative',
-		right: '10px',
 		bottom: '2px'
-	},
-
-	
+	}
 }));
 
 const Banner = (props) => {
@@ -117,6 +112,8 @@ const Banner = (props) => {
 	const [ profileUrl, setProfileUrl ] = useState('');
 	const [ coverUrl, setCoverUrl ] = useState('');
 	const [ posts, setPosts ] = useState([]);
+
+	const bannerPic = coverUrl ? coverUrl : 'https://textbook-connect.s3.ca-central-1.amazonaws.com/1567545109450';
 
 	useEffect(() => {
 		console.log('id2 from storage', id);
@@ -170,7 +167,7 @@ const Banner = (props) => {
 		<Grid container direction="column" alignItems="center">
 			<Grid item id="coverPicture">
 				<div className={classes.coverFrame}>
-					<img src={coverUrl} className={classes.coverPicture} alt="Cover pic" />
+					<img src={bannerPic} className={classes.coverPicture} alt="Cover pic" />
 					<input
 						accept="image/*"
 						style={{ display: 'none' }}
@@ -184,9 +181,11 @@ const Banner = (props) => {
 						</IconButton>
 					</label>
 				</div>
-{profileUrl?				<img src={profileUrl} className={classes.profilePicture} alt="Profile pic" />
-:							<FontAwesomeIcon icon={faUserCircle} className={classes.iconAddProfile} />
-}
+				{profileUrl ? (
+					<img src={profileUrl} className={classes.profilePicture} alt="Profile pic" />
+				) : (
+					<FontAwesomeIcon icon={faUserCircle} className={classes.iconAddProfile} />
+				)}
 				<input
 					accept="image/*"
 					style={{ display: 'none' }}

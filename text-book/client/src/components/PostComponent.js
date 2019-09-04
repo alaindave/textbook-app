@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { StyledButton } from '../themes/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-import ThumbUp from '@material-ui/icons/ThumbUp';
-
 import { faComments } from '@fortawesome/free-solid-svg-icons';
-
-import TextField from '@material-ui/core/TextField';
+import ThumbUp from '@material-ui/icons/ThumbUp';
+import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -45,15 +43,6 @@ const useStyles = makeStyles((theme) => ({
 		backgroundColor: 'transparent',
 		borderStyle: 'none'
 	},
-	buttonComment: {
-		position: 'relative',
-		left: '40px',
-		bottom: '8px',
-		fontSize: '12px',
-		fontSize: '16px',
-		backgroundColor: 'transparent',
-		borderStyle: 'none'
-	},
 
 	iconLike: {
 		fontSize: '12px'
@@ -72,6 +61,20 @@ const useStyles = makeStyles((theme) => ({
 		'&:hover': {
 			color: '#dfe3f0' // grey
 		}
+	},
+
+	iconComment: {
+		color: '#3b5998',
+		fontSize: '22px'
+	},
+
+	buttonComment: {
+		position: 'relative',
+		left: '40px',
+		bottom: '8px',
+		fontSize: '20px',
+		borderStyle: 'none',
+		backgroundColor: 'transparent'
 	}
 }));
 
@@ -79,19 +82,19 @@ const PostComponent = (props) => {
 	const classes = useStyles();
 	const { avatar, firstName, lastName } = props;
 	const [ comment, setComment ] = useState('');
-	const id = window.localStorage.getItem('userID');
+	const userID = window.localStorage.getItem('userID');
 
 	const { date, post, comments, _id: postID } = props.post;
 
 	// const numLikes = Object.keys(props.post.userLikeMap).length;
 	const numComments = comments.length;
-	const isLiked = props.post.userLikeMap[id];
+	const isLiked = props.post.userLikeMap[userID];
 
 	const handleLike = async () => {
 		console.log(' user post: ', props.post);
 
 		await axios
-			.put(`/api/users/${id}/posts/like`, { postID })
+			.put(`/api/users/posts/${postID}/like`, { userID })
 			.then((response) => {
 				console.log('post successfully liked/unliked ', response.data);
 				props.handlePostUpdate(postID);
@@ -114,19 +117,28 @@ const PostComponent = (props) => {
 			<span className={classes.post}>{post}</span>
 			<br />
 			<br />
+			<StyledButton variant="contained" className={classes.buttonLike} type="submit">
+				<ThumbUp className={isLiked ? classes.likedIcon : classes.unlikedIcon} onClick={handleLike} />
+			</StyledButton>
+			<Link
+				to={{
+					pathname: `/profile/${userID}/posts/${postID}`,
 
-			<ThumbUp className={isLiked ? classes.likedIcon : classes.unlikedIcon} onClick={() => handleLike()} />
-
-			<div>
-				<TextField
-					placeholder="Write a comment ..."
-					multiline={true}
-					rows={1}
-					rowsMax={10}
-					value={comment}
-					onChange={(e) => setComment(e.target.value)}
-				/>
-			</div>
+					state: {
+						avatar,
+						firstName,
+						lastName,
+						date,
+						post,
+						postID
+					}
+				}}
+				style={{ textDecoration: 'none' }}
+			>
+				<StyledButton variant="contained" className={classes.buttonComment} type="submit">
+					<FontAwesomeIcon icon={faComments} className={classes.iconComment} />
+				</StyledButton>
+			</Link>
 		</div>
 	);
 };

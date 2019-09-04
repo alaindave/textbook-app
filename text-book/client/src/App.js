@@ -6,6 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { theme } from './themes/theme';
 import Landing from './pages/Landing';
 import Profile from './pages/Profile';
+import Post from './pages/PostPage';
 
 import './App.css';
 
@@ -15,7 +16,8 @@ function App() {
 			<CssBaseline />
 			<BrowserRouter>
 				<Route path="/" exact component={Landing} />
-				<Route path="/profile/:id" exact component={Profile} />
+				<Route path="/profile/:userID" exact component={Profile} />
+				<Route path="/profile/:userID/posts/:postID" exact component={Post} />
 			</BrowserRouter>
 		</MuiThemeProvider>
 	);
