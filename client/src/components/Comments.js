@@ -5,11 +5,8 @@ const useStyles = makeStyles((theme) => ({
 	container: {
         borderStyle: 'solid',
         borderColor: '#3b5998',
-		// width: '800px',
-		// height: '700px',
 		position: 'relative',
-		// top: '20px',
-		// left: '450px'
+	
 	},
 
 	avatar: {
