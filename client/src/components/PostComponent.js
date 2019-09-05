@@ -51,16 +51,16 @@ const useStyles = makeStyles((theme) => ({
 	unlikedIcon: {
 		color: '#dfe3f0', //  grey
 		marginRight: theme.spacing(1),
-		'&:hover': {
-			color: '#3b5998'
-		}
+		// '&:hover': {
+		// 	color: '#3b5998'
+		// }
 	},
 	likedIcon: {
 		color: '#3b5998', //blue
 		marginRight: theme.spacing(1),
-		'&:hover': {
-			color: '#dfe3f0' // grey
-		}
+		// '&:hover': {
+		// 	color: '#dfe3f0' // grey
+		// }
 	},
 
 	iconComment: {
@@ -97,7 +97,7 @@ const PostComponent = (props) => {
 			.put(`/api/users/posts/${postID}/like`, { userID })
 			.then((response) => {
 				console.log('post successfully liked/unliked ', response.data);
-				props.handlePostUpdate(postID);
+				window.location.reload();			
 			})
 			.catch((error) => {
 				console.log(error);

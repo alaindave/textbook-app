@@ -13,11 +13,12 @@ import axios from 'axios';
 const useStyles = makeStyles((theme) => ({
 	container: {
 		borderStyle: 'none',
+		borderColor:'transparent',
 		width: '800px',
 		height: '700px',
 		position: 'relative',
 		top: '20px',
-		left: '450px'
+		left: '200px'
 	},
 
 	avatar: {
@@ -53,7 +54,8 @@ const useStyles = makeStyles((theme) => ({
 		height: '60px',
 		borderRadius: '60px',
 		position: 'relative',
-		top: '430px'
+		top: '50px',
+		left:'130px'
 	},
 
 	commentField: {
@@ -67,8 +69,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 	buttonComment: {
 		position: 'relative',
-		left: '450px',
-		top: '370px',
+		left: '630px',
+		bottom:'12px',
 		fontSize: '18px',
 		borderStyle: 'none',
 		color: '#3b5998',
@@ -106,6 +108,7 @@ const PostPage = (props) => {
 			.then((response) => {
 				console.log('comment successfully saved ', response.data);
 				setComment('');
+				window.location.reload();
 			})
 			.catch((error) => {
 				console.log(error);
@@ -130,7 +133,7 @@ const PostPage = (props) => {
 				</Grid>
 
 				{commentsArray.map((comment) => (
-			<Grid item key={comment._id} className={classes.comments}>
+			<Grid item key={comment._id}>
 				<Comment
 					firstName={comment.author.firstName}
 					lastName={comment.author.lastName}

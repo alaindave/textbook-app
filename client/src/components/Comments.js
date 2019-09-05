@@ -4,64 +4,35 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
 	container: {
         borderStyle: 'solid',
-        borderColor: '#3b5998',
+        borderColor: '#dfe3ee',
 		position: 'relative',
+		top:'25px',
+		left:'120px',
+		marginBottom:'8px'
 	
 	},
-
 	avatar: {
-		width: '40px',
-		height: '48px',
+		width: '30px',
+		height: '38px',
 		objectFit: 'cover',
 		borderRadius: '50%',
 		borderStyle: 'solid',
 		borderColor: 'white'
 	},
-
 	name: {
 		position: 'relative',
 		bottom: '23px',
-		fontSize: '20px',
+		fontSize: '16px',
 		color: '#3b5998	'
 	},
-
 	date: {
 		color: '#8c8c8c',
 		position: 'relative',
 		right: '90px'
 	},
 comment: {
-		fontSize: '20px',
+		fontSize: '17px',
 		marginLeft: '10px'
-	},
-
-	commentContainer: {
-		borderStyle: 'solid',
-		borderColor: '#3b5998',
-		width: '430px',
-		height: '60px',
-		borderRadius: '60px',
-		position: 'relative',
-		top: '430px'
-	},
-
-	commentField: {
-		position: 'relative',
-		marginLeft: '20px'
-	},
-
-	label: {
-		marginLeft: '20px',
-		fontSize: '80px !important'
-	},
-	buttonComment: {
-		position: 'relative',
-		left: '450px',
-		top: '370px',
-		fontSize: '18px',
-		borderStyle: 'none',
-		color: '#3b5998',
-		padding: '15px'
 	}
 }));
 
