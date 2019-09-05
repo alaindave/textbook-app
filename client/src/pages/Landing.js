@@ -127,7 +127,7 @@ const Landing = (props) => {
 
 				// add token and name to local storage
 				window.localStorage.setItem('token', token);
-				window.localStorage.setItem('userID', response.data.id);
+				window.localStorage.setItem('userID', response.data._id);
 				window.localStorage.setItem('firstName', response.data.firstName);
 				window.localStorage.setItem('lastName', response.data.lastName);
 				window.localStorage.setItem('userEmail', response.data.email);

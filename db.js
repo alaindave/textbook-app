@@ -154,6 +154,7 @@ const addComment = async (postID, commentID) => {
 		// Fetch post
 		const post = await Post.findById(postID);
 		post.comments.push(commentID);
+		post.save();
 		return post;
 	} catch (e) {
 		console.log('unable to add comment', e);

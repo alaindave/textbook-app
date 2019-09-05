@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { StyledButton } from '../themes/theme';
 import TextField from '@material-ui/core/TextField';
 import NavBarProfile from '../components/NavBarProfile';
+import Comment from '../components/Comments';
+
+import { Grid } from '@material-ui/core';
+
 
 import axios from 'axios';
 
@@ -73,10 +77,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PostPage = (props) => {
-	const classes = useStyles();
-	const { avatar, firstName, lastName, date, post, postID } = props.location.state;
 	const [ comment, setComment ] = useState('');
+	const [ commentsArray, setCommentsArray ] = useState([]);
+	const { avatar, firstName, lastName, date, post, postID } = props.location.state;
+	const classes = useStyles();
+
+
 	const userID = window.localStorage.getItem('userID');
+
+	useEffect(() => {
+		axios
+			.get(`/api/users/posts/${postID}`)
+			.then((response) => {
+				console.log('Post received:', response.data);
+				setCommentsArray(response.data.comments)
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	}, []);
 
 	const handleComment = async () => {
 		console.log('this is the post ID', postID);
@@ -87,7 +106,6 @@ const PostPage = (props) => {
 			.then((response) => {
 				console.log('comment successfully saved ', response.data);
 				setComment('');
-				props.handlePostUpdate(postID);
 			})
 			.catch((error) => {
 				console.log(error);
@@ -97,7 +115,9 @@ const PostPage = (props) => {
 	return (
 		<div>
 			<NavBarProfile id={userID} profileUrl={avatar} />
+			<Grid container>
 			<div className={classes.container}>
+			<Grid item>
 				<img src={avatar} className={classes.avatar} alt="Cover pic" />
 				<span className={classes.name}>
 					{' '}
@@ -107,8 +127,19 @@ const PostPage = (props) => {
 				<br />
 				<br />
 				<span className={classes.post}>{post}</span>
-				<br />
-				<br />
+				</Grid>
+
+				{commentsArray.map((comment) => (
+			<Grid item key={comment._id} className={classes.comments}>
+				<Comment
+					firstName={comment.author.firstName}
+					lastName={comment.author.lastName}
+					avatar={comment.author.profileUrl}
+					comment={comment.comment}
+				/>
+			</Grid>))}
+
+			<Grid item>
 				<div className={classes.commentContainer}>
 					<TextField
 						className={classes.commentField}
@@ -122,12 +153,15 @@ const PostPage = (props) => {
 						}}
 					/>
 				</div>
-
+			</Grid>
+			<Grid item>
 				<StyledButton variant="contained" className={classes.buttonComment} onClick={handleComment}>
 					Post comment
 				</StyledButton>
+			</Grid>
 			</div>
-		</div>
+			</Grid>
+			</div>
 	);
 };
 

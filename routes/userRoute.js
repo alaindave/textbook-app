@@ -123,7 +123,15 @@ router.post('/:userID/posts', async (req, res, next) => {
 //get single post
 router.get('/posts/:postID', async (req, res, next) => {
 	try {
-		const post = await Post.findById(req.params.postID).populate('comments');
+		const post = await Post.findById(req.params.postID).
+		populate({
+		  path: 'comments',
+		  // populate author of comments
+		  populate: {
+			path: 'author',
+			select: { firstName: '1', lastName: '1', profileUrl: '1' }
+		  }
+		})
 		if (!post) return res.status(404).send('Post not found');
 		res.status(200).send(post);
 	} catch (e) {
