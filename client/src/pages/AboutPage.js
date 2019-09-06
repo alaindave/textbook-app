@@ -32,10 +32,11 @@ const useStyles = makeStyles((theme) => ({
 const AboutPage = (props) => {
 	const classes = useStyles();
 	const { firstName, lastName, email, city, hometown, avatar, photos } = props.location.state;
+	const id = window.localStorage.getItem('userID');
 
 	return (
 		<div>
-			<NavBarProfile avatar={avatar} firstName={firstName} />
+			<NavBarProfile avatar={avatar} firstName={firstName} profileID={id} />
 			<Banner photos={photos} avatar={avatar} />
 			<Grid container direction="column" className={classes.grid}>
 				<div className={classes.bio}>

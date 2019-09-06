@@ -261,7 +261,7 @@ const Banner = (props) => {
 					</StyledButton>
 					<Link
 						to={{
-							pathname: `/profile/${props.id}/photos`,
+							pathname: `/profile/${userID}/photos`,
 							state: {
 								photos,
 								avatar,
