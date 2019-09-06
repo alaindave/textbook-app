@@ -25,10 +25,10 @@ const addUser = async (_user) => {
 	}
 };
 
-const addPic = async (url, id) => {
+const addProfilePic = async (url, userID) => {
 	try {
 		// Fetch user with the given id
-		const user = await User.findById(id);
+		const user = await User.findById(userID);
 
 		//add url to staff document
 		user.profileUrl = url;
@@ -83,11 +83,10 @@ const addPost = async (userID, postID) => {
 	}
 };
 
-const addPhoto = async (url, id) => {
+const addPhoto = async (url, userID) => {
 	try {
 		// Fetch user with the given id
-		const user = await User.findById(id);
-		//add url to staff document
+		const user = await User.findById(userID);
 		user.photos.push(url);
 		user.save();
 		console.log('updated user document', user);
@@ -164,7 +163,7 @@ const addComment = async (postID, commentID) => {
 
 module.exports = {
 	addUser,
-	addPic,
+	addProfilePic,
 	addCoverPic,
 	addPhoto,
 	addVideo,

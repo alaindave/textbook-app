@@ -86,7 +86,7 @@ const PostComponent = (props) => {
 
 	const { date, post, comments, _id: postID } = props.post;
 
-	// const numLikes = Object.keys(props.post.userLikeMap).length;
+	const numLikes = Object.keys(props.post.userLikeMap).length;
 	const numComments = comments.length;
 	const isLiked = props.post.userLikeMap[userID];
 
