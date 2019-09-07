@@ -79,7 +79,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Profile = (props) => {
 	const classes = useStyles();
-	const id = window.localStorage.getItem('userID');
+	const userID = window.localStorage.getItem('userID');
+	const userName = window.localStorage.getItem('userName');
+	const userAvatar = window.localStorage.getItem('userAvatar');
 	const [ firstName, setFirstName ] = useState('');
 	const [ lastName, setLastName ] = useState('');
 	const [ email, setEmail ] = useState('');
@@ -87,10 +89,13 @@ const Profile = (props) => {
 	const [ coverUrl, setCoverUrl ] = useState('');
 	const [ userPosts, setUserPosts ] = useState([]);
 	const [ photos, setPhotos ] = useState([]);
+	const { profileID } = props.match.params;
 
 	useEffect(() => {
+		console.log('logged in user', userID);
+		console.log('profile ID', profileID);
 		axios
-			.get(`/api/users/${id}`)
+			.get(`/api/users/${profileID}`)
 			.then((response) => {
 				console.log('Data received:', response.data);
 				setFirstName(response.data.firstName);
@@ -123,8 +128,8 @@ const Profile = (props) => {
 
 	return (
 		<div className={classes.profileContainer}>
-			<NavBarProfile avatar={avatar} firstName={firstName} profileID={id} />
-			<Banner photos={photos} avatar={avatar} />
+			<NavBarProfile />
+			<Banner profileID={profileID} photos={photos} />
 			<CreatePost />
 			<Grid container className={classes.grid} direction="column">
 				{generateUserPosts()}

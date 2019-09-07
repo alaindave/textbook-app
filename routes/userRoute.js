@@ -113,6 +113,19 @@ router.put('/:userID/edit', async (req, res, next) => {
 	}
 });
 
+//get all users
+router.get('/:userID/friends', async (req, res, next) => {
+	try {
+		const users = await User.find({ _id: { $ne: req.params.userID } });
+		if (!users) return res.status(404).send('no users found');
+		console.log('list of users found', users);
+		res.status(200).send(users);
+	} catch (e) {
+		res.status(500).send('Unable to retrieve users.Try again later');
+		console.log('Unable to retrieve users', e);
+	}
+});
+
 //save avatar
 router.put('/:userID/avatar', (req, res, next) => {
 	const image_upload = upload.single('image');

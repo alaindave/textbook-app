@@ -7,7 +7,6 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
 import logo from '../assets/logo.png';
-import { Avatar } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
 	root: {},
@@ -106,7 +105,7 @@ const useStyles = makeStyles((theme) => ({
 		fontWeight: 'bold'
 	},
 
-	firstName: {
+	userName: {
 		position: 'relative',
 		left: '560px',
 		fontSize: '15px',
@@ -144,7 +143,9 @@ const useStyles = makeStyles((theme) => ({
 function NavBarProfile(props) {
 	const classes = useStyles();
 	const [ keyword, setKeyWord ] = useState('');
-	const { avatar, firstName, profileID } = props;
+	const avatar = window.localStorage.getItem('userAvatar');
+	const userName = window.localStorage.getItem('userName');
+	const profileID = window.localStorage.getItem('userID');
 
 	return (
 		<div className={classes.root}>
@@ -169,9 +170,9 @@ function NavBarProfile(props) {
 								variant="outlined"
 							/>
 						</Grid>
-						<Grid item>{avatar && <img src={avatar} className={classes.profilePic} />}</Grid>
+						<Grid item>{avatar && <img src={avatar} className={classes.profilePic} alt="avatar" />}</Grid>
 						<Grid item>
-							<span className={classes.firstName}> {firstName}</span>
+							<span className={classes.userName}> {userName}</span>
 						</Grid>
 						<Grid item>
 							<Link
@@ -184,7 +185,13 @@ function NavBarProfile(props) {
 						</Grid>
 
 						<Grid item>
-							<button className={classes.findFriends}>Find Friends</button>
+							<Link
+								to={{
+									pathname: `/profile/${profileID}/friends`
+								}}
+							>
+								<button className={classes.findFriends}>Find Friends</button>
+							</Link>
 						</Grid>
 					</Grid>
 				</Toolbar>

@@ -91,7 +91,6 @@ const useStyles = makeStyles((theme) => ({
 const NavBarHome = (props) => {
 	const [ email, setEmail ] = useState('');
 	const [ password, setPassword ] = useState('');
-	const [ errorMessage, setErrorMessage ] = useState('');
 
 	const classes = useStyles();
 
@@ -105,27 +104,19 @@ const NavBarHome = (props) => {
 		await axios
 			.post('/api/auth', userData)
 			.then((response) => {
-				console.log('Data received:', response.data);
-
 				// get jwt token from header
 				const token = response.headers['x-auth-token'];
 
 				// add token and name to local storage
 				window.localStorage.setItem('token', token);
 				window.localStorage.setItem('userID', response.data._id);
-				window.localStorage.setItem('firstName', response.data.firstName);
-				window.localStorage.setItem('lastName', response.data.lastName);
-
-				// test if token is stored
-				const localStorageToken = window.localStorage.getItem('token');
-				console.log('token from local storage:', localStorageToken);
+				window.localStorage.setItem('userName', response.data.firstName);
+				window.localStorage.setItem('userAvatar', response.data.profileUrl);
 
 				//direct user to profile page
-				console.log('id from navbar ', response.data._id);
 				props.handleLogin(true, response.data._id);
 			})
 			.catch((error) => {
-				setErrorMessage(error);
 				console.log(error);
 				props.handleError(error.response.data);
 			});

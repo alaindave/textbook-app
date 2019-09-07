@@ -108,7 +108,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Banner = (props) => {
 	const classes = useStyles();
-	const userID = window.localStorage.getItem('userID');
 	const [ firstName, setFirstName ] = useState('');
 	const [ lastName, setLastName ] = useState('');
 	const [ email, setEmail ] = useState('');
@@ -116,18 +115,15 @@ const Banner = (props) => {
 	const [ hometown, setHometown ] = useState('');
 	const [ profileUrl, setProfileUrl ] = useState('');
 	const [ coverUrl, setCoverUrl ] = useState('');
-	const [ posts, setPosts ] = useState([]);
-	const { photos, avatar } = props;
+	const { profileID, photos } = props;
 
 	const bannerPic = coverUrl ? coverUrl : 'https://textbook-connect.s3.ca-central-1.amazonaws.com/1567545109450';
 
 	useEffect(() => {
-		console.log('id2 from storage', userID);
-
 		axios
-			.get(`/api/users/${userID}`)
+			.get(`/api/users/${profileID}`)
 			.then((response) => {
-				console.log('Data received:', response.data);
+				console.log('user received:', response.data);
 				setFirstName(response.data.firstName);
 				setLastName(response.data.lastName);
 				setEmail(response.data.email);
@@ -145,7 +141,7 @@ const Banner = (props) => {
 		const data = new FormData();
 		data.append('image', e.target.files[0], e.target.files[0].name);
 		await axios
-			.put(`/api/users/${userID}/avatar`, data)
+			.put(`/api/users/${profileID}/avatar`, data)
 			.then((response) => {
 				console.log('Uploaded picture', response.data.imageUrl);
 				setProfileUrl(response.data.imageUrl);
@@ -160,7 +156,7 @@ const Banner = (props) => {
 		const data = new FormData();
 		data.append('image', e.target.files[0], e.target.files[0].name);
 		await axios
-			.put(`/api/users/${userID}/cover`, data)
+			.put(`/api/users/${profileID}/cover`, data)
 			.then((response) => {
 				console.log('Uploaded picture', response.data.imageUrl);
 				setCoverUrl(response.data.imageUrl);
@@ -213,10 +209,9 @@ const Banner = (props) => {
 				</label>
 				<Link
 					to={{
-						pathname: `/profile/${userID}/edit`,
+						pathname: `/profile/${profileID}/edit`,
 
 						state: {
-							avatar,
 							firstName,
 							lastName,
 							email,
@@ -237,10 +232,9 @@ const Banner = (props) => {
 				<div className={classes.navButtons}>
 					<Link
 						to={{
-							pathname: `/profile/${userID}/about`,
+							pathname: `/profile/${profileID}/about`,
 
 							state: {
-								avatar,
 								photos,
 								firstName,
 								lastName,
@@ -261,10 +255,9 @@ const Banner = (props) => {
 					</StyledButton>
 					<Link
 						to={{
-							pathname: `/profile/${userID}/photos`,
+							pathname: `/profile/${profileID}/photos`,
 							state: {
 								photos,
-								avatar,
 								firstName
 							}
 						}}

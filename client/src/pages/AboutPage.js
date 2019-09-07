@@ -1,8 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import NavBarProfile from '../components/NavBarProfile';
-import CreatePost from '../components/CreatePost';
-import PostComponent from '../components/PostComponent';
 
 import Banner from '../components/Banner';
 
@@ -31,13 +29,13 @@ const useStyles = makeStyles((theme) => ({
 
 const AboutPage = (props) => {
 	const classes = useStyles();
-	const { firstName, lastName, email, city, hometown, avatar, photos } = props.location.state;
-	const id = window.localStorage.getItem('userID');
+	const { firstName, lastName, email, city, hometown, photos } = props.location.state;
+	const { profileID } = props.match.params;
 
 	return (
 		<div>
-			<NavBarProfile avatar={avatar} firstName={firstName} profileID={id} />
-			<Banner photos={photos} avatar={avatar} />
+			<NavBarProfile />
+			<Banner profileID={profileID} photos={photos} />
 			<Grid container direction="column" className={classes.grid}>
 				<div className={classes.bio}>
 					<Grid item>

@@ -128,16 +128,12 @@ const Landing = (props) => {
 				// add token and name to local storage
 				window.localStorage.setItem('token', token);
 				window.localStorage.setItem('userID', response.data._id);
-				window.localStorage.setItem('firstName', response.data.firstName);
-				window.localStorage.setItem('lastName', response.data.lastName);
-				window.localStorage.setItem('userEmail', response.data.email);
+				window.localStorage.setItem('userName', response.data.firstName);
+				window.localStorage.setItem('userAvatar', response.data.profileUrl);
 
 				// test if token is stored
-				const localStorageToken = window.localStorage.getItem('token');
-				const id = window.localStorage.getItem('userID');
-
-				console.log('token from local storage:', localStorageToken);
-				console.log('id1 from storage', id);
+				const storageToken = window.localStorage.getItem('token');
+				console.log('token from local storage:', storageToken);
 
 				//direct user to admin page
 				props.history.push({
