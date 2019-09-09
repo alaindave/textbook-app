@@ -55,15 +55,15 @@ const useStyles = makeStyles((theme) => ({
 
 	cameraIconProfile: {
 		position: 'relative',
-		right: '150px',
-		bottom: '200px',
-		fontSize: '8px',
+		right: '155px',
+		bottom: '190px',
+		fontSize: '5px',
 		color: '#ff6666'
 	},
 
 	name: {
 		position: 'relative',
-		bottom: '120px',
+		bottom: '110px',
 		right: '150px',
 		color: '#3b5998',
 		fontSize: '25px',
@@ -77,7 +77,7 @@ const useStyles = makeStyles((theme) => ({
 		borderColor: '#dfe3ee',
 		position: 'relative',
 		bottom: '210px',
-		left: '20px'
+		left: '26px'
 	},
 
 	button: {
@@ -115,7 +115,8 @@ const Banner = (props) => {
 	const [ hometown, setHometown ] = useState('');
 	const [ profileUrl, setProfileUrl ] = useState('');
 	const [ coverUrl, setCoverUrl ] = useState('');
-	const { profileID, photos } = props;
+	const { profileID, photos, loggedInUser } = props;
+	const userID = window.localStorage.getItem('userID');
 
 	const bannerPic = coverUrl ? coverUrl : 'https://textbook-connect.s3.ca-central-1.amazonaws.com/1567545109450';
 
@@ -143,8 +144,9 @@ const Banner = (props) => {
 		await axios
 			.put(`/api/users/${profileID}/avatar`, data)
 			.then((response) => {
-				console.log('Uploaded picture', response.data.imageUrl);
-				setProfileUrl(response.data.imageUrl);
+				console.log('Uploaded picture', response.data.profileUrl);
+				setProfileUrl(response.data.profileUrl);
+				window.localStorage.setItem('userAvatar', response.data.profileUrl);
 				window.location.reload();
 			})
 			.catch((error) => {
@@ -179,11 +181,13 @@ const Banner = (props) => {
 						type="file"
 						onChange={uploadCover}
 					/>
-					<label htmlFor="cover-upload">
-						<IconButton component="span" className={classes.cameraIconCover}>
-							<PhotoCamera />
-						</IconButton>
-					</label>
+					{loggedInUser && (
+						<label htmlFor="cover-upload">
+							<IconButton component="span" className={classes.cameraIconCover}>
+								<PhotoCamera />
+							</IconButton>
+						</label>
+					)}
 				</div>
 				{profileUrl ? (
 					<img src={profileUrl} className={classes.profilePicture} alt="Profile pic" />
@@ -202,30 +206,34 @@ const Banner = (props) => {
 					type="file"
 					onChange={uploadProfile}
 				/>
-				<label htmlFor="picture-upload">
-					<IconButton component="span" className={classes.cameraIconProfile}>
-						<PhotoCamera />
-					</IconButton>
-				</label>
-				<Link
-					to={{
-						pathname: `/profile/${profileID}/edit`,
+				{loggedInUser && (
+					<label htmlFor="picture-upload">
+						<IconButton component="span" className={classes.cameraIconProfile}>
+							<PhotoCamera />
+						</IconButton>
+					</label>
+				)}
+				{loggedInUser && (
+					<Link
+						to={{
+							pathname: `/profile/${profileID}/edit`,
 
-						state: {
-							firstName,
-							lastName,
-							email,
-							city,
-							hometown
-						}
-					}}
-					style={{ textDecoration: 'none' }}
-				>
-					<StyledButton variant="contained" className={classes.buttonEditProfile} type="submit">
-						<FontAwesomeIcon icon={faUserEdit} className={classes.userEdit} />
-						Edit profile
-					</StyledButton>
-				</Link>
+							state: {
+								firstName,
+								lastName,
+								email,
+								city,
+								hometown
+							}
+						}}
+						style={{ textDecoration: 'none' }}
+					>
+						<StyledButton variant="contained" className={classes.buttonEditProfile} type="submit">
+							<FontAwesomeIcon icon={faUserEdit} className={classes.userEdit} />
+							Edit profile
+						</StyledButton>
+					</Link>
+				)}
 			</Grid>
 
 			<Grid item>
@@ -267,10 +275,33 @@ const Banner = (props) => {
 							Photos{' '}
 						</StyledButton>
 					</Link>
+					{loggedInUser ? (
+						<Link
+							to={{
+								pathname: `/profile/${profileID}/messages`,
 
-					<StyledButton variant="contained" className={classes.button} type="submit">
-						Messages{' '}
-					</StyledButton>
+								state: {}
+							}}
+							style={{ textDecoration: 'none' }}
+						>
+							<StyledButton variant="contained" className={classes.button} type="submit">
+								Messages{' '}
+							</StyledButton>
+						</Link>
+					) : (
+						<Link
+							to={{
+								pathname: `/profile/${userID}/sendMessage/${profileID}`,
+
+								state: {}
+							}}
+							style={{ textDecoration: 'none' }}
+						>
+							<StyledButton variant="contained" className={classes.button} type="submit">
+								Send a message{' '}
+							</StyledButton>
+						</Link>
+					)}
 				</div>
 			</Grid>
 		</Grid>

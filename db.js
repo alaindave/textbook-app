@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const User = require('./models/userModel');
 const Post = require('./models/postModel.js');
 const Comment = require('./models/commentModel.js');
+const Message = require('./models/messageModel.js');
 
 mongoose
 	.connect(process.env.MONGODB_URI || 'mongodb://localhost/textbookdb', { useNewUrlParser: true })
@@ -161,6 +162,25 @@ const addComment = async (postID, commentID) => {
 	}
 };
 
+const createMessage = async (author, recipient, subject, message) => {
+	const date = new Date();
+	const _message = new Message({
+		date,
+		author,
+		recipient,
+		subject,
+		message
+	});
+
+	try {
+		const result = await _message.save();
+		return result;
+	} catch (e) {
+		console.log('unable to save message', e);
+		return e.message;
+	}
+};
+
 module.exports = {
 	addUser,
 	addProfilePic,
@@ -171,5 +191,6 @@ module.exports = {
 	addPost,
 	likeUnlikePost,
 	saveComment,
-	addComment
+	addComment,
+	createMessage
 };

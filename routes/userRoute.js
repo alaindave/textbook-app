@@ -9,7 +9,8 @@ const {
 	addPost,
 	likeUnlikePost,
 	saveComment,
-	addComment
+	addComment,
+	createMessage
 } = require('../db');
 const validate = require('../validate/validateNew');
 const User = require('../models/userModel');
@@ -136,7 +137,7 @@ router.put('/:userID/avatar', (req, res, next) => {
 		// Save new url
 		console.log('saved image blob', req.file);
 		addProfilePic(req.file.location, req.params.userID);
-		res.status(200).send({ imageUrl: req.file.location });
+		res.status(200).send({ profileUrl: req.file.location });
 	});
 });
 
@@ -217,6 +218,22 @@ router.post('/posts/:postID/comments', async (req, res, next) => {
 	} catch (e) {
 		console.log('an error occured', e);
 		res.status(500).send('an error occured. Try again later...');
+	}
+});
+
+//send messages
+router.post('/:userID/messages/:recipientID', async (req, res, next) => {
+	try {
+		const user = await User.findById(req.params.userID);
+		if (!user) return res.status(404).send('User not found');
+
+		const recipient = await User.findById(req.params.recipientID);
+		if (!recipient) return res.status(404).send('Recipient not found');
+
+		//create message
+		createMessage(req.params.userID, req.params.recipientID, req.body.message);
+	} catch (e) {
+		console.log('an error occured', e);
 	}
 });
 

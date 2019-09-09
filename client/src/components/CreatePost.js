@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 	container: {
 		position: 'relative',
 		left: '575px',
-		bottom: '200px',
+		bottom: '188px',
 		borderStyle: 'solid',
 		borderColor: '#dfe3ee',
 		width: '400px',

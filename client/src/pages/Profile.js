@@ -91,6 +91,8 @@ const Profile = (props) => {
 	const [ photos, setPhotos ] = useState([]);
 	const { profileID } = props.match.params;
 
+	const loggedInUser = userID === profileID ? true : false;
+
 	useEffect(() => {
 		console.log('logged in user', userID);
 		console.log('profile ID', profileID);
@@ -129,7 +131,7 @@ const Profile = (props) => {
 	return (
 		<div className={classes.profileContainer}>
 			<NavBarProfile />
-			<Banner profileID={profileID} photos={photos} />
+			<Banner profileID={profileID} photos={photos} loggedInUser={loggedInUser} />
 			<CreatePost />
 			<Grid container className={classes.grid} direction="column">
 				{generateUserPosts()}

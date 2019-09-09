@@ -11,6 +11,7 @@ import PhotoPage from './pages/PhotoPage';
 import AboutPage from './pages/AboutPage';
 import EditPage from './pages/EditPage';
 import FriendsPage from './pages/FriendsPage';
+import SendMessage from './pages/SendMessage';
 
 import './App.css';
 
@@ -26,6 +27,7 @@ function App() {
 				<Route path="/profile/:profileID/photos" exact component={PhotoPage} />
 				<Route path="/profile/:profileID/friends" exact component={FriendsPage} />
 				<Route path="/profile/:profileID/posts/:postID" exact component={PostPage} />
+				<Route path="/profile/:userID/sendMessage/:profileID" exact component={SendMessage} />
 			</BrowserRouter>
 		</MuiThemeProvider>
 	);

@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 
 	avatar: {
-		width: '40px',
-		height: '48px',
+		width: '42px',
+		height: '42px',
 		objectFit: 'cover',
 		borderRadius: '50%',
 		borderStyle: 'solid',
@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
 		width: '500px',
 		position: 'relative',
 		left: '100px',
+		marginTop: '8px',
 		marginBottom: '8px'
 	},
 

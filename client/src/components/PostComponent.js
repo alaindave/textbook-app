@@ -50,17 +50,11 @@ const useStyles = makeStyles((theme) => ({
 
 	unlikedIcon: {
 		color: '#dfe3f0', //  grey
-		marginRight: theme.spacing(1),
-		// '&:hover': {
-		// 	color: '#3b5998'
-		// }
+		marginRight: theme.spacing(1)
 	},
 	likedIcon: {
 		color: '#3b5998', //blue
-		marginRight: theme.spacing(1),
-		// '&:hover': {
-		// 	color: '#dfe3f0' // grey
-		// }
+		marginRight: theme.spacing(1)
 	},
 
 	iconComment: {
@@ -75,6 +69,14 @@ const useStyles = makeStyles((theme) => ({
 		fontSize: '20px',
 		borderStyle: 'none',
 		backgroundColor: 'transparent'
+	},
+
+	numLikes: {
+		position: 'relative',
+		left: '32px',
+		bottom: '5px',
+		fontSize: '16px',
+		color: '#3b5998'
 	}
 }));
 
@@ -97,7 +99,7 @@ const PostComponent = (props) => {
 			.put(`/api/users/posts/${postID}/like`, { userID })
 			.then((response) => {
 				console.log('post successfully liked/unliked ', response.data);
-				window.location.reload();			
+				window.location.reload();
 			})
 			.catch((error) => {
 				console.log(error);
@@ -117,6 +119,7 @@ const PostComponent = (props) => {
 			<span className={classes.post}>{post}</span>
 			<br />
 			<br />
+			<span className={classes.numLikes}>{numLikes}</span>
 			<StyledButton variant="contained" className={classes.buttonLike} type="submit">
 				<ThumbUp className={isLiked ? classes.likedIcon : classes.unlikedIcon} onClick={handleLike} />
 			</StyledButton>
