@@ -87,7 +87,7 @@ const useStyles = makeStyles(theme => ({
 
   findFriends: {
     position: "relative",
-    left: "600px",
+    left: "900px",
     backgroundColor: "#3b5998",
     color: "white",
     fontSize: "14px",
@@ -97,7 +97,7 @@ const useStyles = makeStyles(theme => ({
 
   buttonHome: {
     position: "relative",
-    left: "580px",
+    left: "760px",
     backgroundColor: "#3b5998",
     color: "white",
     fontSize: "14px",
@@ -107,7 +107,7 @@ const useStyles = makeStyles(theme => ({
 
   userName: {
     position: "relative",
-    left: "560px",
+    left: "720px",
     fontSize: "15px",
     fontWeight: "bold"
   },
@@ -154,7 +154,7 @@ function NavBarProfile(props) {
               <img src={logo} className={classes.logo} alt="logo" />
             </Grid>
 
-            <Grid item className={classes.search}>
+            {/* <Grid item className={classes.search}>
               <TextField
                 id="search"
                 name="search"
@@ -167,7 +167,7 @@ function NavBarProfile(props) {
                 margin="normal"
                 variant="outlined"
               />
-            </Grid>
+            </Grid> */}
             <Grid item>
               {avatar && (
                 <img src={avatar} className={classes.profilePic} alt="avatar" />
