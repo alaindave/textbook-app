@@ -11,7 +11,8 @@ const {
   saveComment,
   addComment,
   createMessage,
-  addReceived
+  addReceived,
+  addSent
 } = require("../db");
 const validate = require("../validate/validateNew");
 const User = require("../models/userModel");
@@ -94,10 +95,14 @@ router.get("/:userID", async (req, res, next) => {
         path: "receivedMessages",
         populate: {
           path: "author",
-          select: { firstName: "1", lastName: "1", profileUrl: "1" },
-          populate: {
-            path: "replies"
-          }
+          select: { firstName: "1", lastName: "1", profileUrl: "1" }
+        }
+      })
+      .populate({
+        path: "sentMessages",
+        populate: {
+          path: "recipient",
+          select: { firstName: "1", lastName: "1", profileUrl: "1" }
         }
       });
     if (!user) return res.status(404).send("User not found");
@@ -113,7 +118,8 @@ router.get("/:userID", async (req, res, next) => {
       "coverUrl",
       "posts",
       "photos",
-      "receivedMessages"
+      "receivedMessages",
+      "sentMessages"
     ]);
     res.status(200).send(user);
   } catch (e) {
@@ -275,6 +281,7 @@ router.post("/:userID/messages/:recipientID", async (req, res, next) => {
     );
 
     addReceived(recipientID, sentMessage._id);
+    addSent(userID, sentMessage._id);
     res.status(200).send(sentMessage);
   } catch (e) {
     console.log("an error occured", e);

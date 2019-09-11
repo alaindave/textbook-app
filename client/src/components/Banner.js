@@ -23,7 +23,6 @@ const useStyles = makeStyles(theme => ({
 
   cameraIconCover: {
     position: "relative",
-    // left: '5px',
     bottom: "300px",
     color: "#ff6666"
   },
@@ -55,7 +54,7 @@ const useStyles = makeStyles(theme => ({
 
   cameraIconProfile: {
     position: "relative",
-    right: "155px",
+    right: "190px",
     bottom: "190px",
     fontSize: "5px",
     color: "#ff6666"
@@ -94,7 +93,7 @@ const useStyles = makeStyles(theme => ({
     padding: "10px",
     width: "140px",
     height: "40px",
-    left: "360px",
+    left: "340px",
     backgroundColor: "#dfe3ee",
     color: "black"
   },
@@ -112,6 +111,7 @@ const Banner = props => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [receivedMessages, setReceivedMessages] = useState("");
+  const [sentMessages, setSentMessages] = useState("");
   const [city, setCity] = useState("");
   const [hometown, setHometown] = useState("");
   const [profileUrl, setProfileUrl] = useState("");
@@ -121,7 +121,7 @@ const Banner = props => {
 
   const bannerPic = coverUrl
     ? coverUrl
-    : "https://textbook-connect.s3.ca-central-1.amazonaws.com/1567545109450";
+    : "https://textbook-bucket.s3.ca-central-1.amazonaws.com/1568136274004";
 
   useEffect(() => {
     axios
@@ -136,6 +136,7 @@ const Banner = props => {
         setProfileUrl(response.data.profileUrl);
         setCoverUrl(response.data.coverUrl);
         setReceivedMessages(response.data.receivedMessages);
+        setSentMessages(response.data.sentMessages);
       })
       .catch(error => {
         console.log(error);
@@ -310,7 +311,7 @@ const Banner = props => {
             <Link
               to={{
                 pathname: `/profile/${profileID}/messages`,
-                state: { receivedMessages }
+                state: { receivedMessages, sentMessages }
               }}
               style={{ textDecoration: "none" }}
             >
@@ -325,9 +326,7 @@ const Banner = props => {
           ) : (
             <Link
               to={{
-                pathname: `/profile/${userID}/sendMessage/${profileID}`,
-
-                state: {}
+                pathname: `/profile/${userID}/sendMessage/${profileID}`
               }}
               style={{ textDecoration: "none" }}
             >

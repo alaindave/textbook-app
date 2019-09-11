@@ -195,6 +195,18 @@ const addReceived = async (recipientID, message) => {
   }
 };
 
+const addSent = async (userID, message) => {
+  try {
+    // Fetch user with the given id
+    const user = await User.findById(userID);
+    user.sentMessages.push(message);
+    user.save();
+    console.log("updated recipient document", user);
+  } catch (e) {
+    console.log("Unable to save message.Error message:", e.message);
+  }
+};
+
 module.exports = {
   addUser,
   addProfilePic,
@@ -207,5 +219,6 @@ module.exports = {
   saveComment,
   addComment,
   createMessage,
-  addReceived
+  addReceived,
+  addSent
 };

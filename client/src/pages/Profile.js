@@ -108,10 +108,6 @@ const Profile = props => {
   }, []);
 
   const generateUserPosts = () => {
-    if (userPosts.length === 0) {
-      return <span>Please add a post</span>;
-    }
-
     const posts = userPosts.map(post => (
       <Grid item key={post._id} className={classes.post}>
         <PostComponent
@@ -135,7 +131,7 @@ const Profile = props => {
       />
       <CreatePost />
       <Grid container className={classes.grid} direction="column">
-        {generateUserPosts()}
+        {userPosts.length !== 0 && generateUserPosts()}
       </Grid>
     </div>
   );

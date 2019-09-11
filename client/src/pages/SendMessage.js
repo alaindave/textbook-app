@@ -54,6 +54,9 @@ const SendMessage = props => {
       .post(`/api/users/${userID}/messages/${recipientID}`, userData)
       .then(response => {
         console.log("Data received:", response.data);
+        props.history.push({
+          pathname: `/profile/${userID}`
+        });
       })
       .catch(error => {
         console.log(error);
