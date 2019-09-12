@@ -134,7 +134,6 @@ function NavBarProfile(props) {
   const avatar = window.localStorage.getItem("userAvatar");
   const userName = window.localStorage.getItem("userName");
   const profileID = window.localStorage.getItem("userID");
-  const { friends } = props;
 
   return (
     <div className={classes.root}>
@@ -155,8 +154,7 @@ function NavBarProfile(props) {
             <Grid item>
               <Link
                 to={{
-                  pathname: `/profile/${profileID}`,
-                  state: { friends }
+                  pathname: `/profile/${profileID}`
                 }}
               >
                 <button className={classes.buttonHome}>Home</button>
@@ -166,8 +164,7 @@ function NavBarProfile(props) {
             <Grid item>
               <Link
                 to={{
-                  pathname: `/profile/${profileID}/friends`,
-                  state: { friends }
+                  pathname: `/profile/${profileID}/friends`
                 }}
               >
                 <button className={classes.findFriends}>Find Friends</button>

@@ -115,11 +115,13 @@ const Banner = props => {
   const [sentMessages, setSentMessages] = useState("");
   const [city, setCity] = useState("");
   const [hometown, setHometown] = useState("");
+  const [friendsList, setFriendsList] = useState([]);
   const [profileUrl, setProfileUrl] = useState("");
   const [coverUrl, setCoverUrl] = useState("");
   const [addFriendText, setAddFriendText] = useState("Add friend");
-  const { profileID, photos, loggedInUser, friends } = props;
+  const { profileID, photos, loggedInUser } = props;
   const userID = window.localStorage.getItem("userID");
+  const friends = window.localStorage.getItem("friends");
 
   const bannerPic = coverUrl
     ? coverUrl
@@ -135,6 +137,7 @@ const Banner = props => {
         setEmail(response.data.email);
         setCity(response.data.city);
         setHometown(response.data.hometown);
+        setFriendsList(response.data.friends);
         setProfileUrl(response.data.profileUrl);
         setCoverUrl(response.data.coverUrl);
         setReceivedMessages(response.data.receivedMessages);
@@ -193,7 +196,10 @@ const Banner = props => {
       if (friends[i] == profileID) {
         return false;
       }
+
+      console.log("friend number: ", friends[i]);
     }
+
     return true;
   };
 
@@ -211,10 +217,7 @@ const Banner = props => {
         </StyledButton>
       );
     } else {
-      return (
-        // <StyledButton className={classes.edit_addFriend}>Friend</StyledButton>
-        <span> </span>
-      );
+      return <span> </span>;
     }
   };
 
@@ -327,14 +330,23 @@ const Banner = props => {
               About
             </StyledButton>
           </Link>
-
-          <StyledButton
-            variant="contained"
-            className={classes.button}
-            type="submit"
+          <Link
+            to={{
+              pathname: `/profile/${profileID}/friendslist`,
+              state: {
+                friendsList
+              }
+            }}
+            style={{ textDecoration: "none" }}
           >
-            Friends{" "}
-          </StyledButton>
+            <StyledButton
+              variant="contained"
+              className={classes.button}
+              type="submit"
+            >
+              Friends{" "}
+            </StyledButton>
+          </Link>
           <Link
             to={{
               pathname: `/profile/${profileID}/photos`,

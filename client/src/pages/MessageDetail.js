@@ -71,8 +71,7 @@ const MessageDetail = props => {
     message,
     authorID,
     inSentMessage,
-    from,
-    friends
+    from
   } = props.location.state;
 
   const handleClick = () => {
@@ -80,13 +79,10 @@ const MessageDetail = props => {
   };
   return (
     <div>
-      <NavBarProfile friends={friends} />
+      <NavBarProfile />
       <Link
         to={{
-          pathname: `/profile/${authorID}`,
-          state: {
-            friends
-          }
+          pathname: `/profile/${authorID}`
         }}
         style={{ textDecoration: "none" }}
       >

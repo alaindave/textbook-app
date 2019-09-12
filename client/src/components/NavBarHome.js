@@ -112,9 +112,10 @@ const NavBarHome = props => {
         window.localStorage.setItem("userID", response.data._id);
         window.localStorage.setItem("userName", response.data.firstName);
         window.localStorage.setItem("userAvatar", response.data.profileUrl);
+        window.localStorage.setItem("friends", response.data.friends);
 
         //direct user to profile page
-        props.handleLogin(true, response.data._id, response.data.friends);
+        props.handleLogin(true, response.data._id);
       })
       .catch(error => {
         console.log(error);

@@ -60,8 +60,7 @@ const MessagePage = props => {
             to={{
               pathname: `/profile/${profileID}/received`,
               state: {
-                receivedMessages,
-                friends
+                receivedMessages
               }
             }}
             style={{ textDecoration: "none" }}
@@ -76,8 +75,7 @@ const MessagePage = props => {
             to={{
               pathname: `/profile/${profileID}/sent`,
               state: {
-                sentMessages,
-                friends
+                sentMessages
               }
             }}
             style={{ textDecoration: "none" }}

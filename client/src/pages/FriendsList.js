@@ -26,39 +26,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const FriendsPage = props => {
-  const [users, setUsers] = useState([]);
+const FriendsList = props => {
   const classes = useStyles();
-  const userID = window.localStorage.getItem("userID");
-
-  useEffect(() => {
-    axios
-      .get(`/api/users/${userID}/friends`)
-      .then(response => {
-        console.log("list of users:", response.data);
-        setUsers(response.data);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, []);
+  const { friendsList } = props.location.state;
 
   return (
     <div>
       <NavBarProfile />
       <Grid container direction="column" className={classes.container}>
-        {users.map(user => (
+        {friendsList.map(friend => (
           <Link
             to={{
-              pathname: `/profile/${user._id}`
+              pathname: `/profile/${friend._id}`
             }}
             style={{ textDecoration: "none" }}
           >
-            <Grid item key={user._id} className={classes.users}>
+            <Grid item key={friend._id} className={classes.users}>
               <User
-                firstName={user.firstName}
-                lastName={user.lastName}
-                avatar={user.profileUrl}
+                firstName={friend.firstName}
+                lastName={friend.lastName}
+                avatar={friend.profileUrl}
               />
             </Grid>
           </Link>
@@ -68,4 +55,4 @@ const FriendsPage = props => {
   );
 };
 
-export default FriendsPage;
+export default FriendsList;

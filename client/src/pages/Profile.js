@@ -86,7 +86,6 @@ const Profile = props => {
   const [userPosts, setUserPosts] = useState([]);
   const [photos, setPhotos] = useState([]);
   const { profileID } = props.match.params;
-  const { friends } = props.location.state;
   const loggedInUser = userID === profileID ? true : false;
 
   useEffect(() => {
@@ -123,12 +122,11 @@ const Profile = props => {
 
   return (
     <div className={classes.profileContainer}>
-      <NavBarProfile friends={friends} />
+      <NavBarProfile />
       <Banner
         profileID={profileID}
         photos={photos}
         loggedInUser={loggedInUser}
-        friends={friends}
       />
       <CreatePost />
       <Grid container className={classes.grid} direction="column">

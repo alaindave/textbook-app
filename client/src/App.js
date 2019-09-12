@@ -16,6 +16,7 @@ import MessageDetail from "./pages/MessageDetail";
 import SendMessage from "./pages/SendMessage";
 import ReceivedMessage from "./pages/ReceivedMessage";
 import SentMessage from "./pages/SentMessage";
+import FriendsList from "./pages/FriendsList";
 
 import "./App.css";
 
@@ -27,6 +28,11 @@ function App() {
         <Route path="/" exact component={Landing} />
         <Route path="/profile/:profileID" exact component={ProfilePage} />
         <Route path="/profile/:profileID/about" exact component={AboutPage} />
+        <Route
+          path="/profile/:profileID/friendslist"
+          exact
+          component={FriendsList}
+        />
         <Route path="/profile/:profileID/edit" exact component={EditPage} />
         <Route path="/profile/:profileID/photos" exact component={PhotoPage} />
         <Route
