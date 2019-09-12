@@ -12,7 +12,8 @@ const {
   addComment,
   createMessage,
   addReceived,
-  addSent
+  addSent,
+  addFriend
 } = require("../db");
 const validate = require("../validate/validateNew");
 const User = require("../models/userModel");
@@ -104,7 +105,10 @@ router.get("/:userID", async (req, res, next) => {
           path: "recipient",
           select: { firstName: "1", lastName: "1", profileUrl: "1" }
         }
-      });
+      }).populate({
+        path: "friends", 
+         select: { firstName: "1", lastName: "1", profileUrl: "1" }
+        });
     if (!user) return res.status(404).send("User not found");
     console.log("this is the user found", user);
     user = _.pick(user, [
@@ -119,7 +123,8 @@ router.get("/:userID", async (req, res, next) => {
       "posts",
       "photos",
       "receivedMessages",
-      "sentMessages"
+      "sentMessages",
+      "friends"
     ]);
     res.status(200).send(user);
   } catch (e) {
@@ -204,16 +209,20 @@ router.post("/:userID/photos", (req, res, next) => {
     res.status(200).send({ photoUrl: req.file.location });
   });
 });
-//save posts
-router.post("/:userID/posts", async (req, res, next) => {
-  //save post in posts collection
+//add friends 
+router.post("/:userID/friends/:friendID", async (req, res, next) => {
   try {
-    const post = await savePost(req.body.post);
-    console.log("saved post:", post);
-    addPost(req.params.userID, post._id);
-    res.status(200).send(post);
+    const user = await User.findById(req.params.userID);
+    if (!user) return res.status(404).send("User not found");
+    const result= await addFriend(req.params.userID,req.params.friendID)
+
+    res.status(200).send({
+      "message" : "Friend successfully added!",
+      "added friend": result,
+    })
+
   } catch (e) {
-    console.log("an error occured", e);
+    console.log("Unable to add friend. Error message: ", e);
   }
 });
 

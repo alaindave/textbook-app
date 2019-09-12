@@ -9,7 +9,7 @@ dotenv.config();
 const userRouter = require('./routes/userRoute');
 const loginRouter = require('./routes/loginRoute');
 
-if (!process.env.jwtKey || !process.env.secretAccessKey || !process.env.accessKeyId) {
+if (!process.env.jwtKey || !process.env.secretAccessKey || !process.env.accessKeyId||!process.env.MONGODB_URI) {
 	console.error('FATAL ERROR:ENV VARIABLES NOT SET!');
 	process.exit(1);
 }

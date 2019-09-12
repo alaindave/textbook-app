@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 
 const MessageComponent = props => {
   const classes = useStyles();
-  const { avatar, firstName, lastName, subject, message } = props;
+  const { avatar, firstName, lastName, subject } = props;
   return (
     <div>
       <img src={avatar} alt="avatar" className={classes.avatar} />

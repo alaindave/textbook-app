@@ -8,6 +8,12 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   profileUrl: { type: String },
   coverUrl: { type: String },
+  friends:[
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users"
+    }
+  ],
   posts: [
     {
       type: mongoose.Schema.Types.ObjectId,

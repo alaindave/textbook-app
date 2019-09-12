@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-
-import logo from "../assets/logo.png";
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -23,12 +20,11 @@ const useStyles = makeStyles(theme => ({
     height: "1px"
   },
   logo: {
-    height: "27px",
-    width: "27px",
-    backgroundColor: "white",
+    color: "white",
     position: "relative",
-    left: "25px",
-    top: "5px"
+    left: "40px",
+    top: "1px",
+    fontSize: "42px"
   },
   button: {
     margin: theme.spacing(1),
@@ -97,7 +93,7 @@ const useStyles = makeStyles(theme => ({
 
   buttonHome: {
     position: "relative",
-    left: "760px",
+    left: "880px",
     backgroundColor: "#3b5998",
     color: "white",
     fontSize: "14px",
@@ -107,14 +103,21 @@ const useStyles = makeStyles(theme => ({
 
   userName: {
     position: "relative",
-    left: "720px",
+    left: "850px",
     fontSize: "15px",
     fontWeight: "bold"
   },
 
   avatar: {
+    width: "40px",
+    height: "40px",
+    maxWidth: "100px",
+    maxHeight: "100px",
+    objectFit: "cover",
+    borderRadius: "50%",
     position: "relative",
-    left: "540px"
+    left: "810px",
+    borderStyle: "solid"
   },
 
   searchField: {
@@ -123,27 +126,15 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "white",
     position: "relative",
     left: "90px"
-  },
-
-  profilePic: {
-    width: "40px",
-    height: "40px",
-    maxWidth: "100px",
-    maxHeight: "100px",
-    objectFit: "cover",
-    borderRadius: "50%",
-    position: "relative",
-    left: "540px",
-    borderStyle: "solid"
   }
 }));
 
 function NavBarProfile(props) {
   const classes = useStyles();
-  const [keyword, setKeyWord] = useState("");
   const avatar = window.localStorage.getItem("userAvatar");
   const userName = window.localStorage.getItem("userName");
   const profileID = window.localStorage.getItem("userID");
+  const { friends } = props;
 
   return (
     <div className={classes.root}>
@@ -151,26 +142,11 @@ function NavBarProfile(props) {
         <Toolbar variant="regular" className={classes.toolbar}>
           <Grid container direction="row" alignItems="center">
             <Grid item>
-              <img src={logo} className={classes.logo} alt="logo" />
+              <span className={classes.logo}>textbook</span>
             </Grid>
-
-            {/* <Grid item className={classes.search}>
-              <TextField
-                id="search"
-                name="search"
-                InputProps={{
-                  className: classes.searchField
-                }}
-                value={keyword}
-                onChange={e => setKeyWord(e.target.value)}
-                type="search"
-                margin="normal"
-                variant="outlined"
-              />
-            </Grid> */}
             <Grid item>
               {avatar && (
-                <img src={avatar} className={classes.profilePic} alt="avatar" />
+                <img src={avatar} className={classes.avatar} alt="avatar" />
               )}
             </Grid>
             <Grid item>
@@ -179,7 +155,8 @@ function NavBarProfile(props) {
             <Grid item>
               <Link
                 to={{
-                  pathname: `/profile/${profileID}`
+                  pathname: `/profile/${profileID}`,
+                  state: { friends }
                 }}
               >
                 <button className={classes.buttonHome}>Home</button>
@@ -189,7 +166,8 @@ function NavBarProfile(props) {
             <Grid item>
               <Link
                 to={{
-                  pathname: `/profile/${profileID}/friends`
+                  pathname: `/profile/${profileID}/friends`,
+                  state: { friends }
                 }}
               >
                 <button className={classes.findFriends}>Find Friends</button>

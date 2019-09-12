@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   cameraIconCover: {
     position: "relative",
     bottom: "300px",
-    color: "#ff6666"
+    color: "#f7ef0a"
   },
   coverPicture: {
     width: "900px",
@@ -40,8 +40,8 @@ const useStyles = makeStyles(theme => ({
     objectFit: "cover",
     borderRadius: "50%",
     position: "relative",
-    bottom: "150px",
-    left: "10px",
+    bottom: "160px",
+    left: "14px",
     borderStyle: "solid",
     borderColor: "white"
   },
@@ -49,21 +49,22 @@ const useStyles = makeStyles(theme => ({
   iconAddProfile: {
     fontSize: "140px",
     position: "relative",
-    bottom: "190px"
+    left: "35px",
+    bottom: "170px"
   },
 
   cameraIconProfile: {
     position: "relative",
-    right: "190px",
+    right: "170px",
     bottom: "190px",
     fontSize: "5px",
-    color: "#ff6666"
+    color: "#f7ef0a"
   },
 
   name: {
     position: "relative",
-    bottom: "110px",
-    right: "150px",
+    bottom: "120px",
+    right: "160px",
     color: "#3b5998",
     fontSize: "25px",
     fontWeight: "bolder",
@@ -86,14 +87,14 @@ const useStyles = makeStyles(theme => ({
     borderColor: "red"
   },
 
-  buttonEditProfile: {
+  edit_addFriend: {
     position: "relative",
     bottom: "230px",
     fontSize: "14px",
     padding: "10px",
     width: "140px",
     height: "40px",
-    left: "340px",
+    left: "300px",
     backgroundColor: "#dfe3ee",
     color: "black"
   },
@@ -116,7 +117,8 @@ const Banner = props => {
   const [hometown, setHometown] = useState("");
   const [profileUrl, setProfileUrl] = useState("");
   const [coverUrl, setCoverUrl] = useState("");
-  const { profileID, photos, loggedInUser } = props;
+  const [addFriendText, setAddFriendText] = useState("Add friend");
+  const { profileID, photos, loggedInUser, friends } = props;
   const userID = window.localStorage.getItem("userID");
 
   const bannerPic = coverUrl
@@ -141,7 +143,7 @@ const Banner = props => {
       .catch(error => {
         console.log(error);
       });
-  });
+  }, []);
 
   const uploadProfile = async e => {
     const data = new FormData();
@@ -149,7 +151,7 @@ const Banner = props => {
     await axios
       .put(`/api/users/${profileID}/avatar`, data)
       .then(response => {
-        console.log("Uploaded picture", response.data.profileUrl);
+        console.log("Uploaded profile picture", response.data.profileUrl);
         setProfileUrl(response.data.profileUrl);
         window.localStorage.setItem("userAvatar", response.data.profileUrl);
         window.location.reload();
@@ -165,13 +167,55 @@ const Banner = props => {
     await axios
       .put(`/api/users/${profileID}/cover`, data)
       .then(response => {
-        console.log("Uploaded picture", response.data.imageUrl);
+        console.log("Uploaded cover picture", response.data.imageUrl);
         setCoverUrl(response.data.imageUrl);
         window.location.reload();
       })
       .catch(error => {
         console.log(error);
       });
+  };
+
+  const handleAddFriend = async () => {
+    await axios
+      .post(`/api/users/${userID}/friends/${profileID}`)
+      .then(response => {
+        console.log("request to add friend: ", response.data);
+        setAddFriendText("Friend added! ");
+      })
+      .catch(error => {
+        console.log("unable to add friend! ", error);
+      });
+  };
+
+  const isNewFriend = () => {
+    for (let i = 0; i < friends.length; i++) {
+      if (friends[i] == profileID) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const displayAddFriend = () => {
+    const newFriend = isNewFriend();
+    if (newFriend) {
+      return (
+        <StyledButton
+          variant="contained"
+          className={classes.edit_addFriend}
+          onClick={handleAddFriend}
+        >
+          <FontAwesomeIcon icon={faUserEdit} className={classes.userEdit} />
+          {addFriendText}
+        </StyledButton>
+      );
+    } else {
+      return (
+        // <StyledButton className={classes.edit_addFriend}>Friend</StyledButton>
+        <span> </span>
+      );
+    }
   };
 
   return (
@@ -229,7 +273,7 @@ const Banner = props => {
             </IconButton>
           </label>
         )}
-        {loggedInUser && (
+        {loggedInUser ? (
           <Link
             to={{
               pathname: `/profile/${profileID}/edit`,
@@ -246,13 +290,14 @@ const Banner = props => {
           >
             <StyledButton
               variant="contained"
-              className={classes.buttonEditProfile}
-              type="submit"
+              className={classes.edit_addFriend}
             >
               <FontAwesomeIcon icon={faUserEdit} className={classes.userEdit} />
               Edit profile
             </StyledButton>
           </Link>
+        ) : (
+          displayAddFriend()
         )}
       </Grid>
 
@@ -268,7 +313,8 @@ const Banner = props => {
                 lastName,
                 email,
                 city,
-                hometown
+                hometown,
+                loggedInUser
               }
             }}
             style={{ textDecoration: "none" }}
@@ -311,7 +357,7 @@ const Banner = props => {
             <Link
               to={{
                 pathname: `/profile/${profileID}/messages`,
-                state: { receivedMessages, sentMessages }
+                state: { receivedMessages, sentMessages, friends }
               }}
               style={{ textDecoration: "none" }}
             >

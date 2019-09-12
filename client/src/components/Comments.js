@@ -26,7 +26,6 @@ const useStyles = makeStyles(theme => ({
     bottom: "23px",
     fontSize: "18px",
     color: "#3b5998	",
-    position: "relative",
     right: "120px"
   },
   comment: {

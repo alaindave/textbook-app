@@ -48,19 +48,20 @@ const useStyles = makeStyles(theme => ({
 
 const MessagePage = props => {
   const classes = useStyles();
-  const { sentMessages, receivedMessages } = props.location.state;
+  const { sentMessages, receivedMessages, friends } = props.location.state;
   const profileID = window.localStorage.getItem("userID");
 
   return (
     <div>
-      <NavBarProfile />
+      <NavBarProfile friends={friends} />
       <Grid container direction="row" alignItems="center">
         <Grid item>
           <Link
             to={{
               pathname: `/profile/${profileID}/received`,
               state: {
-                receivedMessages
+                receivedMessages,
+                friends
               }
             }}
             style={{ textDecoration: "none" }}
@@ -75,7 +76,8 @@ const MessagePage = props => {
             to={{
               pathname: `/profile/${profileID}/sent`,
               state: {
-                sentMessages
+                sentMessages,
+                friends
               }
             }}
             style={{ textDecoration: "none" }}

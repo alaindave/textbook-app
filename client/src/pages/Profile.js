@@ -86,16 +86,16 @@ const Profile = props => {
   const [userPosts, setUserPosts] = useState([]);
   const [photos, setPhotos] = useState([]);
   const { profileID } = props.match.params;
-
+  const { friends } = props.location.state;
   const loggedInUser = userID === profileID ? true : false;
 
   useEffect(() => {
-    console.log("logged in user", userID);
-    console.log("profile ID", profileID);
+    console.log("Logged in user: ", userID);
+    console.log("Profile ID: ", profileID);
     axios
       .get(`/api/users/${profileID}`)
       .then(response => {
-        console.log("Data received:", response.data);
+        console.log("user received in profile page:", response.data);
         setFirstName(response.data.firstName);
         setLastName(response.data.lastName);
         setAvatar(response.data.profileUrl);
@@ -123,11 +123,12 @@ const Profile = props => {
 
   return (
     <div className={classes.profileContainer}>
-      <NavBarProfile />
+      <NavBarProfile friends={friends} />
       <Banner
         profileID={profileID}
         photos={photos}
         loggedInUser={loggedInUser}
+        friends={friends}
       />
       <CreatePost />
       <Grid container className={classes.grid} direction="column">

@@ -54,7 +54,8 @@ const useStyles = makeStyles(theme => ({
     borderColor: "#dfe3ee",
     width: "500px",
     position: "relative",
-    left: "100px",
+    left: "115px",
+    top:'17px',
     marginTop: "8px",
     marginBottom: "8px"
   },
@@ -67,7 +68,7 @@ const useStyles = makeStyles(theme => ({
     borderRadius: "60px",
     position: "relative",
     top: "50px",
-    left: "100px"
+    left: "110px"
   },
 
   commentField: {
@@ -77,7 +78,7 @@ const useStyles = makeStyles(theme => ({
 
   buttonComment: {
     position: "relative",
-    left: "560px",
+    left: "570px",
     bottom: "12px",
     fontSize: "18px",
     borderStyle: "none",

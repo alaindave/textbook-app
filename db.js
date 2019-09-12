@@ -5,11 +5,12 @@ const Comment = require("./models/commentModel.js");
 const Message = require("./models/messageModel.js");
 
 mongoose
-  .connect(process.env.MONGODB_URI || "mongodb://localhost/textbookdb", {
+  .connect(process.env.MONGODB_URI , {
     useNewUrlParser: true
   })
   .then(() => console.log("Connected to MongoDb..."))
-  .catch(err => console.error("Could not connect to MongoDB", err));
+  .catch(err => {console.error("Could not connect to MongoDB", err);
+                console.log('MONGO process env',process.env.MONGODB_URI)});
 
 const addUser = async _user => {
   const user = new User({
@@ -39,6 +40,7 @@ const addProfilePic = async (url, userID) => {
     console.log("updated user", user);
   } catch (e) {
     console.log("Unable to save image.Error message:", e.message);
+    console.log('profile url ',url)
   }
 };
 
@@ -207,6 +209,19 @@ const addSent = async (userID, message) => {
   }
 };
 
+const addFriend = async (userID, friendID) => {
+  try {
+    // Fetch user with the given id
+    const user = await User.findById(userID);
+    user.friends.push(friendID);
+    user.save();
+    console.log("request to add user approved",friendID);
+    return friendID ;
+  } catch (e) {
+    console.log("Unable to add friend.Error message:", e.message);
+  }
+};
+
 module.exports = {
   addUser,
   addProfilePic,
@@ -220,5 +235,6 @@ module.exports = {
   addComment,
   createMessage,
   addReceived,
-  addSent
+  addSent,
+  addFriend
 };

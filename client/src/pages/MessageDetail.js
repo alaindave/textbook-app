@@ -50,6 +50,14 @@ const useStyles = makeStyles(theme => ({
     borderRadius: "5px",
     top: "100px",
     left: "600px"
+  },
+
+  from_to: {
+    position: "relative",
+    top: "15px",
+    left: "530px",
+    fontSize: "24px",
+    color: "#3b5998"
   }
 }));
 
@@ -62,7 +70,9 @@ const MessageDetail = props => {
     lastName,
     message,
     authorID,
-    inSentMessage
+    inSentMessage,
+    from,
+    friends
   } = props.location.state;
 
   const handleClick = () => {
@@ -70,17 +80,25 @@ const MessageDetail = props => {
   };
   return (
     <div>
-      <NavBarProfile />
+      <NavBarProfile friends={friends} />
       <Link
         to={{
-          pathname: `/profile/${authorID}`
+          pathname: `/profile/${authorID}`,
+          state: {
+            friends
+          }
         }}
         style={{ textDecoration: "none" }}
       >
+        {from ? (
+          <span className={classes.from_to}>From: </span>
+        ) : (
+          <span className={classes.from_to}>To: </span>
+        )}
         <img src={avatar} alt="avatar" className={classes.avatar} />
         <span className={classes.name}>
           {firstName} {lastName}
-        </span>{" "}
+        </span>
       </Link>
       <br />
       <br />

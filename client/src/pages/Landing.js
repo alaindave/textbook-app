@@ -129,7 +129,6 @@ const Landing = (props) => {
 				window.localStorage.setItem('token', token);
 				window.localStorage.setItem('userID', response.data._id);
 				window.localStorage.setItem('userName', response.data.firstName);
-				window.localStorage.setItem('userAvatar', response.data.profileUrl);
 
 				// test if token is stored
 				const storageToken = window.localStorage.getItem('token');
@@ -146,10 +145,13 @@ const Landing = (props) => {
 			});
 	};
 
-	const handleLogin = (isAuthenticated, userID) => {
+	const handleLogin = (isAuthenticated, userID,friends) => {
 		if (isAuthenticated)
 			return props.history.push({
-				pathname: `/profile/${userID}`
+				pathname: `/profile/${userID}`,
+				state:{
+					friends
+				}
 			});
 	};
 

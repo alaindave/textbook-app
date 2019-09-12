@@ -21,45 +21,59 @@ const useStyles = makeStyles(theme => ({
     borderColor: "#dfe3ee",
     borderStyle: "solid",
     marginBottom: "12px"
+  },
+  noMessages: {
+    fontSize: "23px",
+    color: "#3b5998	"
   }
 }));
 
 const SentMessage = props => {
   const classes = useStyles();
-  const { sentMessages } = props.location.state;
+  const { sentMessages, friends } = props.location.state;
   const profileID = window.localStorage.getItem("userID");
 
   return (
     <div>
-      <NavBarProfile />
+      <NavBarProfile friends={friends} />
       <div className={classes.container}>
         <Grid container direction="column" alignItems="center">
-          {sentMessages.map(message => (
-            <Grid key={message._id} item className={classes.message}>
-              <Link
-                to={{
-                  pathname: `/profile/${profileID}/messages/${message._id}`,
+          {sentMessages ? (
+            sentMessages.map(message => (
+              <Grid key={message._id} item className={classes.message}>
+                <Link
+                  to={{
+                    pathname: `/profile/${profileID}/messages/${message._id}`,
 
-                  state: {
-                    avatar: message.recipient.profileUrl,
-                    authorID: message.recipient._id,
-                    firstName: message.recipient.firstName,
-                    lastName: message.recipient.lastName,
-                    message: message.message,
-                    inSentMessage: true
-                  }
-                }}
-                style={{ textDecoration: "none" }}
-              >
-                <Message
-                  avatar={message.recipient.profileUrl}
-                  firstName={message.recipient.firstName}
-                  lastName={message.recipient.lastName}
-                  subject={message.subject}
-                />
-              </Link>
+                    state: {
+                      avatar: message.recipient.profileUrl,
+                      authorID: message.recipient._id,
+                      firstName: message.recipient.firstName,
+                      lastName: message.recipient.lastName,
+                      message: message.message,
+                      inSentMessage: true,
+                      from: false,
+                      friends
+                    }
+                  }}
+                  style={{ textDecoration: "none" }}
+                >
+                  <Message
+                    avatar={message.recipient.profileUrl}
+                    firstName={message.recipient.firstName}
+                    lastName={message.recipient.lastName}
+                    subject={message.subject}
+                  />
+                </Link>
+              </Grid>
+            ))
+          ) : (
+            <Grid item>
+              <span className={classes.noMessages}>
+                No messages to display!
+              </span>
             </Grid>
-          ))}
+          )}
         </Grid>
       </div>
     </div>

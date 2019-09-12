@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { StyledButton } from '../themes/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -77,13 +77,20 @@ const useStyles = makeStyles((theme) => ({
 		bottom: '5px',
 		fontSize: '16px',
 		color: '#3b5998'
+	},
+
+	numComments: {
+		position: 'relative',
+		left: '50px',
+		bottom: '5px',
+		fontSize: '16px',
+		color: '#3b5998'
 	}
 }));
 
 const PostComponent = (props) => {
 	const classes = useStyles();
 	const { avatar, firstName, lastName } = props;
-	const [ comment, setComment ] = useState('');
 	const userID = window.localStorage.getItem('userID');
 
 	const { date, post, comments, _id: postID } = props.post;
@@ -138,6 +145,9 @@ const PostComponent = (props) => {
 				}}
 				style={{ textDecoration: 'none' }}
 			>
+
+<span className={classes.numComments}>{numComments}</span>
+
 				<StyledButton variant="contained" className={classes.buttonComment} type="submit">
 					<FontAwesomeIcon icon={faComments} className={classes.iconComment} />
 				</StyledButton>
