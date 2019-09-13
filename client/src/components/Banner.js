@@ -94,7 +94,7 @@ const useStyles = makeStyles(theme => ({
     padding: "10px",
     width: "140px",
     height: "40px",
-    left: "300px",
+    left: "380px",
     backgroundColor: "#dfe3ee",
     color: "black"
   },

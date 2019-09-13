@@ -14,17 +14,12 @@ const useStyles = makeStyles(theme => ({
     width: "70%"
   },
 
-  labelPhoto: {
-    color: "#3b5998	",
-    position: "relative",
-    left: "80px"
-  },
-
   button: {
     color: "#3b5998	",
     borderStyle: "solid",
     fontSize: "14px",
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
+    position: "relative"
   },
 
   container: {
@@ -39,38 +34,23 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CreatePost = props => {
+const WriteWall = props => {
   const [post, setPost] = useState("");
   const classes = useStyles();
   const userID = window.localStorage.getItem("userID");
+  const { recipientID } = props;
 
   const handlePost = () => {
     axios
-      .post(`/api/users/${userID}/posts`, { post })
+      .post(`/api/users/${userID}/wall/${recipientID}`, { post })
       .then(response => {
-        console.log("Post successfully saved:", response.data);
+        console.log("Post successfully saved on wall:", response.data);
         setPost(" ");
         window.location.reload();
       })
       .catch(error => {
         console.log(error);
       });
-  };
-
-  const uploadPhoto = async e => {
-    const data = new FormData();
-    data.append("image", e.target.files[0], e.target.files[0].name);
-    await axios
-      .post(`/api/users/${userID}/photos`, data)
-      .then(response => {
-        console.log("Uploaded picture", response.data.imageUrl);
-        window.location.reload();
-      })
-      .catch(error => {
-        console.log(error);
-      });
-
-    console.log("i be clicked");
   };
 
   return (
@@ -83,23 +63,12 @@ const CreatePost = props => {
             type="submit"
             onClick={handlePost}
           >
-            Create Post
+            Write on wall
           </StyledButton>
-
-          <input
-            accept="image/*"
-            style={{ display: "none" }}
-            id="photo-upload"
-            type="file"
-            onChange={uploadPhoto}
-          />
-          <label htmlFor="photo-upload">
-            <span className={classes.labelPhoto}>Photo</span>
-          </label>
         </Grid>
         <Grid item>
           <TextField
-            placeholder="What's on your mind?"
+            placeholder="Say something..."
             multiline={true}
             rows={4}
             rowsMax={10}
@@ -112,4 +81,4 @@ const CreatePost = props => {
   );
 };
 
-export default CreatePost;
+export default WriteWall;

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import NavBarProfile from "../components/NavBarProfile";
 import CreatePost from "../components/CreatePost";
+import WriteWall from "../components/WriteWall";
+
 import PostComponent from "../components/PostComponent";
 
 import Banner from "../components/Banner";
@@ -110,9 +112,9 @@ const Profile = props => {
     const posts = userPosts.map(post => (
       <Grid item key={post._id} className={classes.post}>
         <PostComponent
-          firstName={firstName}
-          lastName={lastName}
-          avatar={avatar}
+          firstName={post.author.firstName}
+          lastName={post.author.lastName}
+          avatar={post.author.profileUrl}
           post={post}
         />
       </Grid>
@@ -128,7 +130,7 @@ const Profile = props => {
         photos={photos}
         loggedInUser={loggedInUser}
       />
-      <CreatePost />
+      {loggedInUser ? <CreatePost /> : <WriteWall recipientID={profileID} />}
       <Grid container className={classes.grid} direction="column">
         {userPosts.length !== 0 && generateUserPosts()}
       </Grid>

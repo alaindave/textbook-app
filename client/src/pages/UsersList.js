@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const FriendsPage = props => {
+const UsersList = props => {
   const [users, setUsers] = useState([]);
   const classes = useStyles();
   const userID = window.localStorage.getItem("userID");
@@ -68,4 +68,4 @@ const FriendsPage = props => {
   );
 };
 
-export default FriendsPage;
+export default UsersList;

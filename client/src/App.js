@@ -10,7 +10,7 @@ import PostPage from "./pages/PostPage";
 import PhotoPage from "./pages/PhotoPage";
 import AboutPage from "./pages/AboutPage";
 import EditPage from "./pages/EditPage";
-import FriendsPage from "./pages/FriendsPage";
+import UsersList from "./pages/UsersList";
 import MessagePage from "./pages/MessagePage";
 import MessageDetail from "./pages/MessageDetail";
 import SendMessage from "./pages/SendMessage";
@@ -35,11 +35,7 @@ function App() {
         />
         <Route path="/profile/:profileID/edit" exact component={EditPage} />
         <Route path="/profile/:profileID/photos" exact component={PhotoPage} />
-        <Route
-          path="/profile/:profileID/friends"
-          exact
-          component={FriendsPage}
-        />
+        <Route path="/profile/:profileID/friends" exact component={UsersList} />
 
         <Route
           path="/profile/:profileID/messages"

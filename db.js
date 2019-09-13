@@ -5,12 +5,14 @@ const Comment = require("./models/commentModel.js");
 const Message = require("./models/messageModel.js");
 
 mongoose
-  .connect(process.env.MONGODB_URI , {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true
   })
   .then(() => console.log("Connected to MongoDb..."))
-  .catch(err => {console.error("Could not connect to MongoDB", err);
-                console.log('MONGO process env',process.env.MONGODB_URI)});
+  .catch(err => {
+    console.error("Could not connect to MongoDB", err);
+    console.log("MONGO process env", process.env.MONGODB_URI);
+  });
 
 const addUser = async _user => {
   const user = new User({
@@ -40,7 +42,7 @@ const addProfilePic = async (url, userID) => {
     console.log("updated user", user);
   } catch (e) {
     console.log("Unable to save image.Error message:", e.message);
-    console.log('profile url ',url)
+    console.log("profile url ", url);
   }
 };
 
@@ -58,11 +60,12 @@ const addCoverPic = async (url, id) => {
   }
 };
 
-const savePost = async post => {
+const savePost = async (author, post) => {
   const date = new Date();
   const userLikeMap = new Map();
   const _post = new Post({
     date,
+    author,
     post,
     userLikeMap
   });
@@ -82,6 +85,7 @@ const addPost = async (userID, postID) => {
     const user = await User.findById(userID);
     user.posts.push(postID);
     const result = await user.save();
+    console.log("post added to user document", result);
     return result;
   } catch (e) {
     console.log("Unable to add post to user document.Error message:", e);
@@ -215,8 +219,8 @@ const addFriend = async (userID, friendID) => {
     const user = await User.findById(userID);
     user.friends.push(friendID);
     user.save();
-    console.log("request to add user approved",friendID);
-    return friendID ;
+    console.log("request to add user approved", friendID);
+    return friendID;
   } catch (e) {
     console.log("Unable to add friend.Error message:", e.message);
   }

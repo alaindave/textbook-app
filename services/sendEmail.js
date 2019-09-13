@@ -1,39 +1,48 @@
-const nodeMailer = require('nodemailer');
+const nodeMailer = require("nodemailer");
 
 sendEmail = (req, res) => {
-	const { firstName, lastName, startDate, endDate, adminEmail, adminName } = req.body;
+  const { firstName, email } = req.body;
+  const token = res.locals.token;
+  const response = res.locals.response;
 
-	const transporter = nodeMailer.createTransport({
-		host: 'smtp.gmail.com',
-		port: 465,
-		secure: true,
-		auth: {
-			user: process.env.email,
-			pass: process.env.email_password
-		}
-	});
-	const mailOptions = {
-		from: process.env.email,
-		to: `${adminEmail}`,
-		subject: `Days off request for ${firstName} ${lastName} `,
-		text: ` Hello ${adminName},
+  const transporter = nodeMailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.email,
+      pass: process.env.password
+    }
+  });
+  const mailOptions = {
+    from: process.env.email,
+    to: `${email}`,
+    subject: `Welcome to Textbook `,
+    text: ` Hi ${firstName},
         
-    ${firstName} ${lastName} will be off from ${startDate} to ${endDate}.
+	I'd like to personally thank you for joining Textbook. 
+	Use this app to stay in touch with friends from all over the world. 
+    For all questions and concerns, reply to this email directly!
 		
-Thanks
+	Alain from Textbook
 
- Your electronic manager
         `
-	};
-	transporter.sendMail(mailOptions, (error, info) => {
-		if (error) {
-			console.log('error sending email', error);
-			res.status(400).send({ success: false });
-		} else {
-			console.log('email sent successfully!', info.response);
-			res.status(200).send({ success: true });
-		}
-	});
+  };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("error sending email", error);
+      console.log("token: ", token);
+      console.log("response: ", response);
+
+      res.status(400).send({ success: false });
+    } else {
+      console.log("email sent successfully!", info.response);
+      res
+        .header("x-auth-token", token)
+        .status(200)
+        .send(response);
+    }
+  });
 };
 
 module.exports = sendEmail;

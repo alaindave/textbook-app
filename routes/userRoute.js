@@ -5,78 +5,81 @@ const {
   addProfilePic,
   addPhoto,
   addCoverPic,
-  savePost,
-  addPost,
   likeUnlikePost,
   saveComment,
   addComment,
   createMessage,
   addReceived,
   addSent,
-  addFriend
+  addFriend,
+  savePost,
+  addPost
 } = require("../db");
 const validate = require("../validate/validateNew");
 const User = require("../models/userModel");
 const Post = require("../models/postModel");
 const hash = require("../hash");
-const authorize = require("../authorize");
 const upload = require("../services/fileUpload");
+const sendEmail = require("../services/sendEmail");
 
 const _ = require("lodash");
 
 //register new user
-router.post("/", async (req, res, next) => {
-  //validate input
-  const error = validate(req.body);
+router.post(
+  "/",
+  async (req, res, next) => {
+    //validate input
+    const error = validate(req.body);
 
-  if (error) {
-    console.log(error.details[0].message);
-    res.status(400).send(error.details[0].message);
-    return;
-  }
+    if (error) {
+      console.log(error.details[0].message);
+      res.status(400).send(error.details[0].message);
+      return;
+    }
 
-  let user = await User.findOne({ email: req.body.email });
-  if (user)
-    return res.status(400).send("This email is registered to another user. ");
-
-  //save user into database
-  try {
-    const { firstName, lastName, email } = req.body;
-
-    //hash password
-    const password = await hash(req.body.password);
-
-    //create new admin object
-    user = new User({
-      firstName,
-      lastName,
-      email,
-      password
-    });
+    let user = await User.findOne({ email: req.body.email });
+    if (user)
+      return res.status(400).send("This email is registered to another user. ");
 
     //save user into database
-    const userSaved = await addUser(user);
+    try {
+      const { firstName, lastName, email } = req.body;
 
-    if (typeof userSaved.email !== "undefined") {
-      const response = _.pick(userSaved, [
-        "_id",
-        "firstName",
-        "lastName",
-        "email"
-      ]);
-      const token = user.generateToken();
-      res
-        .header("x-auth-token", token)
-        .status(200)
-        .send(response);
-      console.log("User registered successfully", userSaved);
-    } else {
-      res.status(500).send("Unable to register user");
+      //hash password
+      const password = await hash(req.body.password);
+
+      //create new admin object
+      user = new User({
+        firstName,
+        lastName,
+        email,
+        password
+      });
+
+      //save user into database
+      const userSaved = await addUser(user);
+
+      if (typeof userSaved.email !== "undefined") {
+        const response = _.pick(userSaved, [
+          "_id",
+          "firstName",
+          "lastName",
+          "email"
+        ]);
+        const token = user.generateToken();
+        res.locals.token = token;
+        res.locals.response = response;
+        console.log(" user registered successfully! ", response);
+        next();
+      } else {
+        res.status(500).send("Unable to register user");
+      }
+    } catch (e) {
+      console.log("An error occured while registering user.... ", e);
     }
-  } catch (e) {
-    console.log(e);
-  }
-});
+  },
+  sendEmail
+);
 
 //get user
 router.get("/:userID", async (req, res, next) => {
@@ -85,10 +88,15 @@ router.get("/:userID", async (req, res, next) => {
       .populate({
         path: "posts",
         populate: {
-          path: "comments",
+          path: "author",
+          select: { firstName: "1", lastName: "1", profileUrl: "1" },
+
           populate: {
-            path: "author",
-            select: { firstName: "1", lastName: "1", profileUrl: "1" }
+            path: "comments",
+            populate: {
+              path: "author",
+              select: { firstName: "1", lastName: "1", profileUrl: "1" }
+            }
           }
         }
       })
@@ -105,10 +113,11 @@ router.get("/:userID", async (req, res, next) => {
           path: "recipient",
           select: { firstName: "1", lastName: "1", profileUrl: "1" }
         }
-      }).populate({
-        path: "friends", 
-         select: { firstName: "1", lastName: "1", profileUrl: "1" }
-        });
+      })
+      .populate({
+        path: "friends",
+        select: { firstName: "1", lastName: "1", profileUrl: "1" }
+      });
     if (!user) return res.status(404).send("User not found");
     console.log("this is the user found", user);
     user = _.pick(user, [
@@ -209,34 +218,78 @@ router.post("/:userID/photos", (req, res, next) => {
     res.status(200).send({ photoUrl: req.file.location });
   });
 });
-//add friends 
+
+//add friends
 router.post("/:userID/friends/:friendID", async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userID);
     if (!user) return res.status(404).send("User not found");
-    const result= await addFriend(req.params.userID,req.params.friendID)
+    const result = await addFriend(req.params.userID, req.params.friendID);
 
     res.status(200).send({
-      "message" : "Friend successfully added!",
-      "added friend": result,
-    })
-
+      message: "Friend successfully added!",
+      "added friend": result
+    });
   } catch (e) {
     console.log("Unable to add friend. Error message: ", e);
+  }
+});
+
+// post on own wall
+router.post("/:userID/posts", async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.userID);
+    if (!user) return res.status(404).send("User not found");
+    const { post } = req.body;
+
+    const result = await savePost(req.params.userID, post);
+
+    //add post to user document
+    const postSaved = await addPost(req.params.userID, result._id);
+    console.log("post saved with success!", postSaved);
+    res.status(200).send(postSaved);
+  } catch (e) {
+    console.log("an error occured", e);
+  }
+});
+
+//post on friend's wall
+router.post("/:userID/wall/:recipientID", async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.userID);
+    if (!user) return res.status(404).send("User not found");
+
+    const recipient = await User.findById(req.params.recipientID);
+    if (!recipient) return res.status(404).send("Recipient not found");
+
+    const { userID, recipientID } = req.params;
+    const { post } = req.body;
+
+    const result = await savePost(userID, post);
+
+    const postSaved = await addPost(recipientID, result._id);
+
+    res.status(200).send(postSaved);
+  } catch (e) {
+    console.log("an error occured", e);
   }
 });
 
 //get single post
 router.get("/posts/:postID", async (req, res, next) => {
   try {
-    const post = await Post.findById(req.params.postID).populate({
-      path: "comments",
-      // populate author of comments
-      populate: {
+    const post = await Post.findById(req.params.postID)
+      .populate({
         path: "author",
         select: { firstName: "1", lastName: "1", profileUrl: "1" }
-      }
-    });
+      })
+      .populate({
+        path: "comments",
+        populate: {
+          path: "author",
+          select: { firstName: "1", lastName: "1", profileUrl: "1" }
+        }
+      });
     if (!post) return res.status(404).send("Post not found");
     res.status(200).send(post);
   } catch (e) {
