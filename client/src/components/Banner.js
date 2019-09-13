@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 
   name: {
     position: "relative",
-    bottom: "120px",
+    bottom: "110px",
     right: "160px",
     color: "#3b5998",
     fontSize: "25px",
@@ -94,7 +94,7 @@ const useStyles = makeStyles(theme => ({
     padding: "10px",
     width: "140px",
     height: "40px",
-    left: "340px",
+    left: "350px",
     backgroundColor: "#dfe3ee",
     color: "black"
   },
@@ -121,14 +121,12 @@ const Banner = props => {
     friends,
     receivedMessages,
     sentMessages,
-    photos
   } = props;
 
   const [addFriendText, setAddFriendText] = useState("Add friend");
   const [friendsList, setFriendsList] = useState([]);
   const [profileUrl, setProfileUrl] = useState();
   const [cover, setCover] = useState();
-
   const userID = window.localStorage.getItem("userID");
 
   const bannerPic = coverUrl
@@ -308,13 +306,13 @@ const Banner = props => {
               pathname: `/profile/${profileID}/about`,
 
               state: {
-                photos,
                 firstName,
                 lastName,
                 email,
                 city,
                 hometown,
-                loggedInUser
+                loggedInUser,
+                avatar
               }
             }}
             style={{ textDecoration: "none" }}
@@ -348,8 +346,7 @@ const Banner = props => {
             to={{
               pathname: `/profile/${profileID}/photos`,
               state: {
-                photos,
-                firstName
+                loggedInUser
               }
             }}
             style={{ textDecoration: "none" }}

@@ -78,7 +78,7 @@ const EditPage = (props) => {
 			.put(`/api/users/${userID}/edit`, userData)
 			.then((response) => {
 				console.log('Update user:', response.data);
-				//direct user to profile page
+				// direct user to profile page
 				props.history.push({
 					pathname: `/profile/${userID}`
 				});
