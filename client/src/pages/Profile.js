@@ -68,7 +68,7 @@ const useStyles = makeStyles(theme => ({
 
   post: {
     position: "relative",
-    left: "580px",
+    left: "574px",
     bottom: "200px",
     borderStyle: "solid",
     borderColor: "#dfe3ee",
@@ -82,13 +82,21 @@ const useStyles = makeStyles(theme => ({
 const Profile = props => {
   const classes = useStyles();
   const userID = window.localStorage.getItem("userID");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [userPosts, setUserPosts] = useState([]);
-  const [photos, setPhotos] = useState([]);
   const { profileID } = props.match.params;
   const loggedInUser = userID === profileID ? true : false;
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [receivedMessages, setReceivedMessages] = useState("");
+  const [sentMessages, setSentMessages] = useState("");
+  const [city, setCity] = useState("");
+  const [hometown, setHometown] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [coverUrl, setCoverUrl] = useState("");
+  const [friends, setFriends] = useState([]);
+  const [photos, setPhotos] = useState([]);
+  const [userPosts, setUserPosts] = useState([]);
 
   useEffect(() => {
     console.log("Logged in user: ", userID);
@@ -99,9 +107,16 @@ const Profile = props => {
         console.log("user received in profile page:", response.data);
         setFirstName(response.data.firstName);
         setLastName(response.data.lastName);
+        setEmail(response.data.email);
+        setCity(response.data.city);
+        setHometown(response.data.hometown);
         setAvatar(response.data.profileUrl);
-        setUserPosts(response.data.posts);
+        setCoverUrl(response.data.coverUrl);
+        setFriends(response.data.friends);
         setPhotos(response.data.photos);
+        setUserPosts(response.data.posts);
+        setReceivedMessages(response.data.receivedMessages);
+        setSentMessages(response.data.sentMessages);
       })
       .catch(error => {
         console.log(error);
@@ -129,6 +144,16 @@ const Profile = props => {
         profileID={profileID}
         photos={photos}
         loggedInUser={loggedInUser}
+        firstName={firstName}
+        lastName={lastName}
+        email={email}
+        avatar={avatar}
+        coverUrl={coverUrl}
+        city={city}
+        hometown={hometown}
+        friends={friends}
+        receivedMessages={receivedMessages}
+        sentMessages={sentMessages}
       />
       {loggedInUser ? <CreatePost /> : <WriteWall recipientID={profileID} />}
       <Grid container className={classes.grid} direction="column">

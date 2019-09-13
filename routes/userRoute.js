@@ -254,26 +254,34 @@ router.post("/:userID/posts", async (req, res, next) => {
 });
 
 //post on friend's wall
-router.post("/:userID/wall/:recipientID", async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.userID);
-    if (!user) return res.status(404).send("User not found");
+router.post(
+  "/:userID/wall/:recipientID",
+  async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.userID);
+      if (!user) return res.status(404).send("User not found");
 
-    const recipient = await User.findById(req.params.recipientID);
-    if (!recipient) return res.status(404).send("Recipient not found");
+      const recipient = await User.findById(req.params.recipientID);
+      if (!recipient) return res.status(404).send("Recipient not found");
 
-    const { userID, recipientID } = req.params;
-    const { post } = req.body;
+      const { userID, recipientID } = req.params;
+      const { post } = req.body;
 
-    const result = await savePost(userID, post);
+      const result = await savePost(userID, post);
 
-    const postSaved = await addPost(recipientID, result._id);
+      const postSaved = await addPost(recipientID, result._id);
 
-    res.status(200).send(postSaved);
-  } catch (e) {
-    console.log("an error occured", e);
-  }
-});
+      res.locals.postSaved = postSaved;
+
+      next();
+
+      // res.status(200).send(postSaved);
+    } catch (e) {
+      console.log("an error occured", e);
+    }
+  },
+  sendEmail
+);
 
 //get single post
 router.get("/posts/:postID", async (req, res, next) => {

@@ -23,6 +23,14 @@ const useStyles = makeStyles(theme => ({
     height: "120px",
     width: "600px",
     marginBottom: "8px"
+  },
+
+  noFriends: {
+    fontSize: "23px",
+    color: "#3b5998	",
+    position: "relative",
+    left: "250px",
+    top: "100px"
   }
 }));
 
@@ -47,22 +55,26 @@ const UsersList = props => {
     <div>
       <NavBarProfile />
       <Grid container direction="column" className={classes.container}>
-        {users.map(user => (
-          <Link
-            to={{
-              pathname: `/profile/${user._id}`
-            }}
-            style={{ textDecoration: "none" }}
-          >
-            <Grid item key={user._id} className={classes.users}>
-              <User
-                firstName={user.firstName}
-                lastName={user.lastName}
-                avatar={user.profileUrl}
-              />
-            </Grid>
-          </Link>
-        ))}
+        {users.length !== 0 ? (
+          users.map(user => (
+            <Link
+              to={{
+                pathname: `/profile/${user._id}`
+              }}
+              style={{ textDecoration: "none" }}
+            >
+              <Grid item key={user._id} className={classes.users}>
+                <User
+                  firstName={user.firstName}
+                  lastName={user.lastName}
+                  avatar={user.profileUrl}
+                />
+              </Grid>
+            </Link>
+          ))
+        ) : (
+          <span className={classes.noFriends}>No friends to display!</span>
+        )}
       </Grid>
     </div>
   );

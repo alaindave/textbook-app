@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
 
   cameraIconProfile: {
     position: "relative",
-    right: "170px",
+    right: "185px",
     bottom: "190px",
     fontSize: "5px",
     color: "#f7ef0a"
@@ -94,7 +94,7 @@ const useStyles = makeStyles(theme => ({
     padding: "10px",
     width: "140px",
     height: "40px",
-    left: "380px",
+    left: "340px",
     backgroundColor: "#dfe3ee",
     color: "black"
   },
@@ -108,20 +108,28 @@ const useStyles = makeStyles(theme => ({
 
 const Banner = props => {
   const classes = useStyles();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [receivedMessages, setReceivedMessages] = useState("");
-  const [sentMessages, setSentMessages] = useState("");
-  const [city, setCity] = useState("");
-  const [hometown, setHometown] = useState("");
-  const [friendsList, setFriendsList] = useState([]);
-  const [profileUrl, setProfileUrl] = useState("");
-  const [coverUrl, setCoverUrl] = useState("");
+  const {
+    loggedInUser,
+    profileID,
+    firstName,
+    lastName,
+    email,
+    city,
+    hometown,
+    avatar,
+    coverUrl,
+    friends,
+    receivedMessages,
+    sentMessages,
+    photos
+  } = props;
+
   const [addFriendText, setAddFriendText] = useState("Add friend");
-  const { profileID, photos, loggedInUser } = props;
+  const [friendsList, setFriendsList] = useState([]);
+  const [profileUrl, setProfileUrl] = useState();
+  const [cover, setCover] = useState();
+
   const userID = window.localStorage.getItem("userID");
-  const friends = window.localStorage.getItem("friends");
 
   const bannerPic = coverUrl
     ? coverUrl
@@ -129,19 +137,10 @@ const Banner = props => {
 
   useEffect(() => {
     axios
-      .get(`/api/users/${profileID}`)
+      .get(`/api/users/${userID}`)
       .then(response => {
-        console.log("user received in Banner:", response.data);
-        setFirstName(response.data.firstName);
-        setLastName(response.data.lastName);
-        setEmail(response.data.email);
-        setCity(response.data.city);
-        setHometown(response.data.hometown);
+        console.log("User friend's list. Received in Banner:", response.data);
         setFriendsList(response.data.friends);
-        setProfileUrl(response.data.profileUrl);
-        setCoverUrl(response.data.coverUrl);
-        setReceivedMessages(response.data.receivedMessages);
-        setSentMessages(response.data.sentMessages);
       })
       .catch(error => {
         console.log(error);
@@ -171,7 +170,7 @@ const Banner = props => {
       .put(`/api/users/${profileID}/cover`, data)
       .then(response => {
         console.log("Uploaded cover picture", response.data.imageUrl);
-        setCoverUrl(response.data.imageUrl);
+        setCover(response.data.imageUrl);
         window.location.reload();
       })
       .catch(error => {
@@ -192,12 +191,10 @@ const Banner = props => {
   };
 
   const isNewFriend = () => {
-    for (let i = 0; i < friends.length; i++) {
-      if (friends[i] == profileID) {
+    for (let i = 0; i < friendsList.length; i++) {
+      if (friendsList[i]._id == profileID) {
         return false;
       }
-
-      console.log("friend number: ", friends[i]);
     }
 
     return true;
@@ -245,9 +242,9 @@ const Banner = props => {
             </label>
           )}
         </div>
-        {profileUrl ? (
+        {avatar ? (
           <img
-            src={profileUrl}
+            src={avatar}
             className={classes.profilePicture}
             alt="Profile pic"
           />
@@ -334,7 +331,7 @@ const Banner = props => {
             to={{
               pathname: `/profile/${profileID}/friendslist`,
               state: {
-                friendsList
+                friends
               }
             }}
             style={{ textDecoration: "none" }}
@@ -369,7 +366,7 @@ const Banner = props => {
             <Link
               to={{
                 pathname: `/profile/${profileID}/messages`,
-                state: { receivedMessages, sentMessages, friends }
+                state: { receivedMessages, sentMessages }
               }}
               style={{ textDecoration: "none" }}
             >

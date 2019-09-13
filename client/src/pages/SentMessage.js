@@ -24,7 +24,9 @@ const useStyles = makeStyles(theme => ({
   },
   noMessages: {
     fontSize: "23px",
-    color: "#3b5998	"
+    color: "#3b5998	",
+    position: "relative",
+    top: "100px"
   }
 }));
 
@@ -38,7 +40,7 @@ const SentMessage = props => {
       <NavBarProfile friends={friends} />
       <div className={classes.container}>
         <Grid container direction="column" alignItems="center">
-          {sentMessages ? (
+          {sentMessages.length !== 0 ? (
             sentMessages.map(message => (
               <Grid key={message._id} item className={classes.message}>
                 <Link
