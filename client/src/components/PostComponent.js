@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 	date: {
 		color: '#8c8c8c',
 		position: 'relative',
-		right: '90px'
+		right: '40px'
 	},
 	post: {
 		fontSize: '20px',
