@@ -61,7 +61,12 @@ const addCoverPic = async (url, id) => {
 };
 
 const savePost = async (author, post) => {
-  const date = new Date();
+  const d = new Date();
+
+  var date = new Date(d.getTime() - d.getTimezoneOffset() * 60000)
+    .toISOString()
+    .split("T")[0];
+
   const userLikeMap = new Map();
   const _post = new Post({
     date,
