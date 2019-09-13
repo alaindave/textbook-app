@@ -20,7 +20,9 @@ const User = require("../models/userModel");
 const Post = require("../models/postModel");
 const hash = require("../hash");
 const upload = require("../services/fileUpload");
-const sendEmail = require("../services/sendEmail");
+const sendWelcomeEmail = require("../services/sendWelcomeEmail");
+const sendPostEmail = require("../services/sendPostEmail");
+const sendMessageEmail = require("../services/sendMessageEmail");
 
 const _ = require("lodash");
 
@@ -78,7 +80,7 @@ router.post(
       console.log("An error occured while registering user.... ", e);
     }
   },
-  sendEmail
+  sendWelcomeEmail
 );
 
 //get user
@@ -271,16 +273,18 @@ router.post(
 
       const postSaved = await addPost(recipientID, result._id);
 
-      res.locals.postSaved = postSaved;
+      res.locals.senderFirstName = user.firstName;
+      res.locals.senderLastName = user.lastName;
+      res.locals.receiver = recipient.firstName;
+      res.locals.email = recipient.email;
+      res.locals.response = postSaved;
 
       next();
-
-      // res.status(200).send(postSaved);
     } catch (e) {
       console.log("an error occured", e);
     }
   },
-  sendEmail
+  sendPostEmail
 );
 
 //get single post
@@ -332,30 +336,41 @@ router.post("/posts/:postID/comments", async (req, res, next) => {
 });
 
 //send messages
-router.post("/:userID/messages/:recipientID", async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.userID);
-    if (!user) return res.status(404).send("User not found");
+router.post(
+  "/:userID/messages/:recipientID",
+  async (req, res, next) => {
+    try {
+      const user = await User.findById(req.params.userID);
+      if (!user) return res.status(404).send("User not found");
 
-    const recipient = await User.findById(req.params.recipientID);
-    if (!recipient) return res.status(404).send("Recipient not found");
+      const recipient = await User.findById(req.params.recipientID);
+      if (!recipient) return res.status(404).send("Recipient not found");
 
-    const { userID, recipientID } = req.params;
-    const { subject, message } = req.body;
-    //create message
-    const sentMessage = await createMessage(
-      userID,
-      recipientID,
-      subject,
-      message
-    );
+      const { userID, recipientID } = req.params;
+      const { subject, message } = req.body;
+      //create message
+      const sentMessage = await createMessage(
+        userID,
+        recipientID,
+        subject,
+        message
+      );
 
-    addReceived(recipientID, sentMessage._id);
-    addSent(userID, sentMessage._id);
-    res.status(200).send(sentMessage);
-  } catch (e) {
-    console.log("an error occured", e);
-  }
-});
+      addReceived(recipientID, sentMessage._id);
+      addSent(userID, sentMessage._id);
+
+      res.locals.senderFirstName = user.firstName;
+      res.locals.senderLastName = user.lastName;
+      res.locals.receiver = recipient.firstName;
+      res.locals.email = recipient.email;
+      res.locals.response = sentMessage;
+
+      next();
+    } catch (e) {
+      console.log("an error occured", e);
+    }
+  },
+  sendMessageEmail
+);
 
 module.exports = router;

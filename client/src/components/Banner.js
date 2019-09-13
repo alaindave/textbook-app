@@ -55,7 +55,7 @@ const useStyles = makeStyles(theme => ({
 
   cameraIconProfile: {
     position: "relative",
-    right: "185px",
+    right: "180px",
     bottom: "190px",
     fontSize: "5px",
     color: "#f7ef0a"

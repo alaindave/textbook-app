@@ -1,6 +1,6 @@
 const nodeMailer = require("nodemailer");
 
-sendEmail = (req, res) => {
+sendWelcomeEmail = (req, res) => {
   const { firstName, email } = req.body;
   const token = res.locals.token;
   const response = res.locals.response;
@@ -14,7 +14,8 @@ sendEmail = (req, res) => {
       pass: process.env.password
     }
   });
-  const mailOptions = {
+
+  const welcomeEmail = {
     from: process.env.email,
     to: `${email}`,
     subject: `Welcome to Textbook `,
@@ -25,10 +26,10 @@ sendEmail = (req, res) => {
     For all questions and concerns, reply to this email directly!
 		
 	Alain from Textbook
-
-        `
+   `
   };
-  transporter.sendMail(mailOptions, (error, info) => {
+
+  transporter.sendMail(welcomeEmail, (error, info) => {
     if (error) {
       console.log("error sending email", error);
       console.log("token: ", token);
@@ -45,4 +46,4 @@ sendEmail = (req, res) => {
   });
 };
 
-module.exports = sendEmail;
+module.exports = sendWelcomeEmail;
