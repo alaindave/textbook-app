@@ -74,14 +74,6 @@ const useStyles = makeStyles((theme) => ({
 		fontFamily: 'Times New Roman'
 	},
 
-	// navButtons: {
-	// 	borderStyle: 'solid',
-	// 	borderColor: '#dfe3ee',
-	// 	position: 'relative',
-	// 	bottom: '225px',
-	// 	left: '75px'
-	// },
-
 	button: {
 		color: '#3b5998	',
 		backgroundColor: '#ffffff',
@@ -91,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
 
 	edit_addFriend: {
 		position: 'relative',
-		bottom: '315px',
+		bottom: '310px',
 		fontSize: '14px',
 		padding: '10px',
 		width: '140px',
