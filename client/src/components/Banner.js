@@ -7,6 +7,8 @@ import { StyledButton } from '../themes/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
 import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import NavUser from '../components/NavButtonsUser';
+import NavFriend from '../components/NavButtonsFriend';
 
 import Grid from '@material-ui/core/Grid';
 
@@ -49,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 	iconAddProfile: {
 		fontSize: '140px',
 		position: 'relative',
-		left: '35px',
+		right: '290px',
 		bottom: '170px'
 	},
 
@@ -72,13 +74,13 @@ const useStyles = makeStyles((theme) => ({
 		fontFamily: 'Times New Roman'
 	},
 
-	navButtons: {
-		borderStyle: 'solid',
-		borderColor: '#dfe3ee',
-		position: 'relative',
-		bottom: '290px',
-		left: '75px'
-	},
+	// navButtons: {
+	// 	borderStyle: 'solid',
+	// 	borderColor: '#dfe3ee',
+	// 	position: 'relative',
+	// 	bottom: '225px',
+	// 	left: '75px'
+	// },
 
 	button: {
 		color: '#3b5998	',
@@ -128,20 +130,22 @@ const Banner = (props) => {
 	const [ profileUrl, setProfileUrl ] = useState();
 	const [ cover, setCover ] = useState();
 	const userID = window.localStorage.getItem('userID');
-
 	const bannerPic = coverUrl ? coverUrl : 'https://textbook-bucket.s3.ca-central-1.amazonaws.com/1568136274004';
 
-	useEffect(() => {
-		axios
-			.get(`/api/users/${userID}`)
-			.then((response) => {
-				console.log("User friend's list. Received in Banner:", response.data);
-				setFriendsList(response.data.friends);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
+	useEffect(
+		() => {
+			axios
+				.get(`/api/users/${userID}`)
+				.then((response) => {
+					console.log("User friend's list. Received in Banner:", response.data);
+					setFriendsList(response.data.friends);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		[ userID ]
+	);
 
 	const uploadProfile = async (e) => {
 		const data = new FormData();
@@ -209,7 +213,6 @@ const Banner = (props) => {
 			return <span> </span>;
 		}
 	};
-
 	return (
 		<Grid container direction="column" alignItems="center">
 			<Grid item id="coverPicture">
@@ -288,79 +291,36 @@ const Banner = (props) => {
 				)}
 			</Grid>
 
-			<Grid item>
-				<div className={classes.navButtons}>
-					<Link
-						to={{
-							pathname: `/profile/${profileID}/about`,
-
-							state: {
-								firstName,
-								lastName,
-								email,
-								city,
-								hometown,
-								loggedInUser,
-								avatar
-							}
-						}}
-						style={{ textDecoration: 'none' }}
-					>
-						<StyledButton variant="contained" className={classes.button} type="submit">
-							About
-						</StyledButton>
-					</Link>
-					<Link
-						to={{
-							pathname: `/profile/${profileID}/friendslist`,
-							state: {
-								friends
-							}
-						}}
-						style={{ textDecoration: 'none' }}
-					>
-						<StyledButton variant="contained" className={classes.button} type="submit">
-							Friends{' '}
-						</StyledButton>
-					</Link>
-					<Link
-						to={{
-							pathname: `/profile/${profileID}/photos`,
-							state: {
-								loggedInUser
-							}
-						}}
-						style={{ textDecoration: 'none' }}
-					>
-						<StyledButton variant="contained" className={classes.button} type="submit">
-							Photos{' '}
-						</StyledButton>
-					</Link>
-					{loggedInUser ? (
-						<Link
-							to={{
-								pathname: `/profile/${profileID}/messages`,
-								state: { receivedMessages, sentMessages }
-							}}
-							style={{ textDecoration: 'none' }}
-						>
-							<StyledButton variant="contained" className={classes.button} type="submit">
-								Messages{' '}
-							</StyledButton>
-						</Link>
-					) : (
-						<Link
-							to={{
-								pathname: `/profile/${userID}/sendMessage/${profileID}`
-							}}
-							style={{ textDecoration: 'none' }}
-						>
-							<StyledButton variant="contained" className={classes.button} type="submit">
-								Send a message{' '}
-							</StyledButton>
-						</Link>
-					)}
-				</div>
+			<Grid item className={classes.navButtons}>
+				{loggedInUser ? (
+					<NavUser
+						profileID={profileID}
+						loggedInUser={loggedInUser}
+						sentMessages={sentMessages}
+						receivedMessages={receivedMessages}
+						friends={friends}
+						firstName={firstName}
+						lastName={lastName}
+						email={email}
+						city={city}
+						hometown={hometown}
+						avatar={avatar}
+					/>
+				) : (
+					<NavFriend
+						profileID={profileID}
+						loggedInUser={loggedInUser}
+						sentMessages={sentMessages}
+						receivedMessages={receivedMessages}
+						friends={friends}
+						firstName={firstName}
+						lastName={lastName}
+						email={email}
+						city={city}
+						hometown={hometown}
+						avatar={avatar}
+					/>
+				)}
 			</Grid>
 		</Grid>
 	);

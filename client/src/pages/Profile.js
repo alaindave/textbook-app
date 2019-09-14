@@ -3,11 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import NavBarProfile from '../components/NavBarProfile';
 import CreatePost from '../components/CreatePost';
 import WriteWall from '../components/WriteWall';
-
 import PostComponent from '../components/PostComponent';
-
 import Banner from '../components/Banner';
-
 import { Grid } from '@material-ui/core';
 
 import axios from 'axios';
@@ -69,13 +66,18 @@ const useStyles = makeStyles((theme) => ({
 	post: {
 		position: 'relative',
 		left: '574px',
-		bottom: '262px',
+		bottom: '220px',
 		borderStyle: 'solid',
 		borderColor: '#dfe3ee',
 		width: '400px',
 		height: '180px',
 		backgroundColor: '#ffffff',
 		marginBottom: '15px'
+	},
+
+	writeWall: {
+		position: 'relative',
+		top: '50px'
 	}
 }));
 
@@ -87,15 +89,14 @@ const Profile = (props) => {
 	const [ firstName, setFirstName ] = useState('');
 	const [ lastName, setLastName ] = useState('');
 	const [ email, setEmail ] = useState('');
-	const [ receivedMessages, setReceivedMessages ] = useState('');
-	const [ sentMessages, setSentMessages ] = useState('');
+	const [ receivedMessages, setReceivedMessages ] = useState([]);
+	const [ sentMessages, setSentMessages ] = useState([]);
 	const [ city, setCity ] = useState('');
 	const [ hometown, setHometown ] = useState('');
 	const [ avatar, setAvatar ] = useState('');
 	const [ coverUrl, setCoverUrl ] = useState('');
 	const [ friends, setFriends ] = useState([]);
 	const [ userPosts, setUserPosts ] = useState([]);
-	const reloadKey = props.location.state;
 
 	useEffect(
 		() => {
@@ -145,21 +146,35 @@ const Profile = (props) => {
 	return (
 		<div className={classes.profileContainer}>
 			<NavBarProfile />
-			<Banner
-				profileID={profileID}
-				loggedInUser={loggedInUser}
-				firstName={firstName}
-				lastName={lastName}
-				email={email}
-				avatar={avatar}
-				coverUrl={coverUrl}
-				city={city}
-				hometown={hometown}
-				friends={friends}
-				receivedMessages={receivedMessages}
-				sentMessages={sentMessages}
-			/>
-			{loggedInUser ? <CreatePost /> : <WriteWall recipientID={profileID} />}
+			<Grid containerdirection="column">
+				<Grid item>
+					<Banner
+						profileID={profileID}
+						loggedInUser={loggedInUser}
+						firstName={firstName}
+						lastName={lastName}
+						email={email}
+						avatar={avatar}
+						coverUrl={coverUrl}
+						city={city}
+						hometown={hometown}
+						friends={friends}
+						receivedMessages={receivedMessages}
+						sentMessages={sentMessages}
+					/>
+				</Grid>
+
+				{loggedInUser ? (
+					<Grid item>
+						<CreatePost />{' '}
+					</Grid>
+				) : (
+					<Grid item className={classes.writeWall}>
+						<WriteWall recipientID={profileID} />
+					</Grid>
+				)}
+			</Grid>
+
 			<Grid container className={classes.grid} direction="column">
 				{userPosts.length !== 0 && generateUserPosts()}
 			</Grid>

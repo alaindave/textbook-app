@@ -46,7 +46,6 @@ const SentMessage = (props) => {
 								<Link
 									to={{
 										pathname: `/profile/${profileID}/messages/${message._id}`,
-
 										state: {
 											avatar: message.recipient.profileUrl,
 											authorID: message.recipient._id,
