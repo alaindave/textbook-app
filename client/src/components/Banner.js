@@ -95,7 +95,7 @@ const useStyles = makeStyles((theme) => ({
 
 	userEdit: {
 		position: 'relative',
-		bottom: '2px',
+		bottom: '2.1px',
 		marginRight: '10px'
 	}
 }));
