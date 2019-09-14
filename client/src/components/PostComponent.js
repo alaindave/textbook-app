@@ -106,7 +106,7 @@ const PostComponent = (props) => {
 			.put(`/api/users/posts/${postID}/like`, { userID })
 			.then((response) => {
 				console.log('post successfully liked/unliked ', response.data);
-				// window.location.reload();
+				window.location.reload();
 			})
 			.catch((error) => {
 				console.log(error);

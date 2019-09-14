@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import NavBarProfile from '../components/NavBarProfile';
 import User from '../components/User';
 
 import { Grid } from '@material-ui/core';
-
-import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
 	container: {
@@ -20,9 +18,10 @@ const useStyles = makeStyles((theme) => ({
 	users: {
 		borderStyle: 'solid',
 		borderColor: '#dfe3ee',
+		borderRadius: '24px',
 		height: '120px',
 		width: '600px',
-		marginBottom: '8px'
+		marginBottom: '11px'
 	},
 
 	noFriends: {

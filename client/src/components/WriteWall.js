@@ -13,19 +13,21 @@ const useStyles = makeStyles((theme) => ({
 		flexWrap: 'wrap',
 		width: '70%'
 	},
-
 	button: {
-		color: '#3b5998	',
-		borderStyle: 'solid',
-		fontSize: '14px',
-		backgroundColor: 'transparent',
-		position: 'relative'
+		color: 'white',
+		fontSize: '18px',
+		backgroundColor: 'green',
+		position: 'relative',
+		left: '260px',
+		top: '104px',
+		paddingLeft: '14px',
+		paddingRight: '14px'
 	},
 
 	container: {
 		position: 'relative',
 		left: '575px',
-		bottom: '188px',
+		bottom: '260px',
 		borderStyle: 'solid',
 		borderColor: '#dfe3ee',
 		width: '400px',
@@ -57,15 +59,15 @@ const WriteWall = (props) => {
 		<div className={classes.container}>
 			<Grid container direction="column">
 				<Grid item>
-					<StyledButton variant="contained" className={classes.button} type="submit" onClick={handlePost}>
+					<button variant="contained" className={classes.button} type="submit" onClick={handlePost}>
 						Write on wall
-					</StyledButton>
+					</button>
 				</Grid>
 				<Grid item>
 					<TextField
 						placeholder="Say something..."
 						multiline={true}
-						rows={4}
+						rows={5}
 						rowsMax={10}
 						value={post}
 						onChange={(e) => setPost(e.target.value)}

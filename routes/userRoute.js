@@ -152,7 +152,7 @@ router.put('/:userID/edit', async (req, res, next) => {
 		user.hometown = _hometown;
 		user.save();
 		console.log('user updated', user);
-		res.status(200).send({ 'Updated user': user });
+		res.status(200).send(user);
 	} catch (e) {
 		res.status(500).send('Unable to retrieve user.Try again later');
 		console.log('Unable to retrieve user', e);

@@ -78,6 +78,8 @@ const EditPage = (props) => {
 			.put(`/api/users/${userID}/edit`, userData)
 			.then((response) => {
 				console.log('Update user:', response.data);
+				window.localStorage.setItem('userName', response.data.firstName);
+
 				// direct user to profile page
 				props.history.push({
 					pathname: `/profile/${userID}`

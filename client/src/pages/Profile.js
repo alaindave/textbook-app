@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 	post: {
 		position: 'relative',
 		left: '574px',
-		bottom: '200px',
+		bottom: '262px',
 		borderStyle: 'solid',
 		borderColor: '#dfe3ee',
 		width: '400px',
@@ -95,33 +95,37 @@ const Profile = (props) => {
 	const [ coverUrl, setCoverUrl ] = useState('');
 	const [ friends, setFriends ] = useState([]);
 	const [ userPosts, setUserPosts ] = useState([]);
+	const reloadKey = props.location.state;
 
-	useEffect(() => {
-		console.log('Logged in user: ', userID);
-		console.log('Profile ID: ', profileID);
-		const avatar = window.localStorage.getItem('userAvatar');
-		console.log('Profile Avatar: ', avatar);
+	useEffect(
+		() => {
+			console.log('Logged in user: ', userID);
+			console.log('Profile ID: ', profileID);
+			const avatar = window.localStorage.getItem('userAvatar');
+			console.log('Profile Avatar: ', avatar);
 
-		axios
-			.get(`/api/users/${profileID}`)
-			.then((response) => {
-				console.log('user received in profile page:', response.data);
-				setFirstName(response.data.firstName);
-				setLastName(response.data.lastName);
-				setEmail(response.data.email);
-				setCity(response.data.city);
-				setHometown(response.data.hometown);
-				setAvatar(response.data.profileUrl);
-				setCoverUrl(response.data.coverUrl);
-				setFriends(response.data.friends);
-				setUserPosts(response.data.posts);
-				setReceivedMessages(response.data.receivedMessages);
-				setSentMessages(response.data.sentMessages);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}, []);
+			axios
+				.get(`/api/users/${profileID}`)
+				.then((response) => {
+					console.log('user received in profile page:', response.data);
+					setFirstName(response.data.firstName);
+					setLastName(response.data.lastName);
+					setEmail(response.data.email);
+					setCity(response.data.city);
+					setHometown(response.data.hometown);
+					setAvatar(response.data.profileUrl);
+					setCoverUrl(response.data.coverUrl);
+					setFriends(response.data.friends);
+					setUserPosts(response.data.posts);
+					setReceivedMessages(response.data.receivedMessages);
+					setSentMessages(response.data.sentMessages);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
+		},
+		[ profileID, userID ]
+	);
 
 	const generateUserPosts = () => {
 		userPosts.reverse();
