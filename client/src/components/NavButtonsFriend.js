@@ -36,6 +36,7 @@ const NavButtonsFriend = (props) => {
 		hometown,
 		avatar
 	} = props;
+	const userID = window.localStorage.getItem('userID');
 
 	return (
 		<Grid container direction="row" className={classes.navButtons}>
@@ -94,7 +95,7 @@ const NavButtonsFriend = (props) => {
 			<Grid item>
 				<Link
 					to={{
-						pathname: `/profile/${profileID}/messages`,
+						pathname: `/profile/${userID}/sendMessage/${profileID}`,
 						state: { receivedMessages, sentMessages }
 					}}
 					style={{ textDecoration: 'none' }}

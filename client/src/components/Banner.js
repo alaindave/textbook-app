@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
 
 	edit_addFriend: {
 		position: 'relative',
-		bottom: '310px',
+		bottom: '300px',
 		fontSize: '14px',
 		padding: '10px',
 		width: '140px',
