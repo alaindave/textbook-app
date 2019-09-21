@@ -1,5 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
 
 const useStyles = makeStyles((theme) => ({
 	name: {
@@ -20,6 +22,13 @@ const useStyles = makeStyles((theme) => ({
 		position: 'relative',
 		top: '15px',
 		left: '8px'
+	},
+
+	iconAddProfile: {
+		fontSize: '90px',
+		position: 'relative',
+		top: '10px',
+		left: '5px'
 	}
 }));
 
@@ -29,7 +38,11 @@ const User = (props) => {
 
 	return (
 		<div>
-			<img src={avatar} className={classes.avatar} alt="avatar" />
+			{avatar ? (
+				<img src={avatar} className={classes.avatar} alt="avatar" />
+			) : (
+				<FontAwesomeIcon icon={faUserCircle} className={classes.iconAddProfile} />
+			)}
 			<span className={classes.name}>
 				{firstName} {lastName}
 			</span>

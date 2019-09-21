@@ -81,9 +81,21 @@ const useStyles = makeStyles((theme) => ({
 		borderColor: 'red'
 	},
 
-	edit_addFriend: {
+	addFriend: {
 		position: 'relative',
-		bottom: '300px',
+		bottom: '260px',
+		fontSize: '14px',
+		padding: '10px',
+		width: '140px',
+		height: '40px',
+		left: '350px',
+		backgroundColor: '#dfe3ee',
+		color: 'black'
+	},
+
+	editProfile: {
+		position: 'relative',
+		bottom: '310px',
 		fontSize: '14px',
 		padding: '10px',
 		width: '140px',
@@ -196,7 +208,7 @@ const Banner = (props) => {
 		const newFriend = isNewFriend();
 		if (newFriend) {
 			return (
-				<StyledButton variant="contained" className={classes.edit_addFriend} onClick={handleAddFriend}>
+				<StyledButton variant="contained" className={classes.addFriend} onClick={handleAddFriend}>
 					<FontAwesomeIcon icon={faUserEdit} className={classes.userEdit} />
 					{addFriendText}
 				</StyledButton>
@@ -273,7 +285,7 @@ const Banner = (props) => {
 						}}
 						style={{ textDecoration: 'none' }}
 					>
-						<StyledButton variant="contained" className={classes.edit_addFriend}>
+						<StyledButton variant="contained" className={classes.editProfile}>
 							<FontAwesomeIcon icon={faUserEdit} className={classes.userEdit} />
 							Edit profile
 						</StyledButton>
